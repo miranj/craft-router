@@ -50,6 +50,9 @@ It currently offers one controller `router/lists` with one action `applyFilters`
 ## Example
 
 ```php
+/* craft/config/routes.php */
+
+return array(
   
   'blog(/(?P<foodCategory>[^/]+))?(/(?P<year>\d{4}))?' => array(
     'action' => 'router/lists/applyFilters',
@@ -82,6 +85,7 @@ It currently offers one controller `router/lists` with one action `applyFilters`
     ),
   ),
 
+);
 ```
 
 
