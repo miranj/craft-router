@@ -2,6 +2,8 @@
 
 A [Craft CMS][craft] plugin to route requests to pages with a filtered, pre-loaded list of entries.
 
+
+
 ## Why
 
 Craft makes it straightforward to declare [dynamic routes as regular expressions][ar]
@@ -28,10 +30,59 @@ for the URL "blog/2015/01" contain blog posts published in January 2015, or for 
 [ar]:http://buildwithcraft.com/docs/routing#advanced-routing "Advanced Routing - Craft Docs"
 
 
+
 ## Installation
 
 1. Place the `router` folder inside your `craft/plugins/` folder.
 2. Go to Settings > Plugins inside your Control Panel and install **Router**.
+
+
+
+## Usage
+
+The plugin works by [routing requests through new controller actions][rca].
+It currently offers one controller `router/lists` with one action `applyFilters`.
+
+[rca]:http://buildwithcraft.com/docs/routing#routing-to-controller-actions "Routing to Controller Actions - Craft Docs"
+
+
+
+## Example
+
+```php
+  
+  'blog(/(?P<foodCategory>[^/]+))?(/(?P<year>\d{4}))?' => array(
+    'action' => 'router/lists/applyFilters',
+    'params' => array(
+      
+      // template file
+      'template' => 'blog/_archive',
+      
+      // the craft.entries.section handle
+      'list' => 'blog',
+      
+      // array of filters that are activated when
+      // the key matches a subpattern variable declared in
+      // the route's regular expression
+      'filters' => array(
+        
+        // Filter entries by year
+        'year' => array(
+          'type' => 'year',
+          'field'=> 'postDate',
+        ),
+        
+        // Filter entries by categories
+        // from the group with the handle 'food'
+        'foodCategory' => array(
+          'type' => 'category',
+          'group'=> 'food',
+        ),
+      ),
+    ),
+  ),
+
+```
 
 
 
