@@ -1,10 +1,12 @@
-# Router
+Router
+======
 
 A [Craft CMS][craft] plugin to route requests to pages with a filtered, pre-loaded list of entries.
 
 
 
-## Why
+Why
+---
 
 Craft makes it straightforward to declare [dynamic routes as regular expressions][ar]
 and redirect them to be handled by a template file. However, the templates themselves
@@ -31,14 +33,16 @@ for the URL "blog/2015/01" contain blog posts published in January 2015, or for 
 
 
 
-## Installation
+Installation
+------------
 
 1. Place the `router` folder inside your `craft/plugins/` folder.
 2. Go to Settings > Plugins inside your Control Panel and install **Router**.
 
 
 
-## Usage
+Usage
+-----
 
 The plugin works by [routing requests through new controller actions][rca].
 It currently offers one controller `router/lists` with one action `applyFilters`.
@@ -47,7 +51,8 @@ It currently offers one controller `router/lists` with one action `applyFilters`
 
 
 
-## Example
+Example
+-------
 
 ```php
 /* craft/config/routes.php */
