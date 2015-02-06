@@ -64,6 +64,43 @@ class Router_ListsController extends BaseController
             
             
             
+            case 'field':
+              
+              // complain if field handle hasn't been set
+              if (!isset($filter['handle'])) {
+                throw new Exception(
+                  'Field filters ("type" => "field") need '
+                  .'the field\'s handle ("handle" => "fieldHandle") to be declared.'
+                );
+              }
+              
+              $field = $this->fetchSingle($filter['handle'], 'field');
+              
+              // abort if no such field exists
+              if ($field === false) {
+                throw new HttpException(404);
+              }
+              
+              // Look for a matching option if the field has them
+              if ($field->fieldType instanceof BaseOptionsFieldType) {
+                $options = $field->fieldType->options;
+                foreach ($options as $option) {
+                  if ($option['value'] === $value) {
+                    $value = $option;
+                  }
+                }
+                
+                // abort if no such field option exists
+                if (!is_array($value)) {
+                  throw new HttpException(404);
+                }
+              } 
+              
+              $criteria->{$field['handle']} = $value;
+              break;
+            
+            
+            
             case 'search':
               $criteria->search = isset($filter['value']) ? $filter['value'] : $value;
               break;
