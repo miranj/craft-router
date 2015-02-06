@@ -11,6 +11,11 @@ class Router_ListsController extends BaseController
   
   public function actionApplyFilters($list, array $filters = array(), $template, array $variables = array())
   {
+    $shorthand_mappings = array(
+      'entry' => 'section',
+      'category' => 'group',
+      'field' => 'handle',
+    );
     
     // First try and fetch the base section
     $section = $this->fetchSingle($list, 'section');
@@ -25,7 +30,10 @@ class Router_ListsController extends BaseController
           $filter_args = explode(':', $filter);
           $filter = array( 'type' => $filter_args[0] );
           if (count($filter_args) > 1) {
-            $filter[ $filter['type'] == 'entry' ? 'section' : 'group' ] = $filter_args[1];
+            $second_param_key = isset($shorthand_mappings[$filter['type']])
+              ? $shorthand_mappings[$filter['type']]
+              : 'group';
+            $filter[$second_param_key] = $filter_args[1];
           }
         }
         
