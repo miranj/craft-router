@@ -145,6 +145,13 @@ class Router_ListsController extends BaseController
   
   /*
    * Find the entry/category/section object by slug
+   * 
+   * @param     $slug   the slug/handle of the single object
+   * @param     $type   one of entry, section, category, field
+   * @param     $parent restrict search of the single object within
+   *                    the parent's scope, where parent is a slug for
+   *                    section in the case of type:entry, and
+   *                    category group in the case of type:category
   **/
   private function fetchSingle($slug, $type = 'entry', $parent = false) {
     
@@ -154,6 +161,9 @@ class Router_ListsController extends BaseController
     switch ($type) {
       case 'section':
         return craft()->sections->getSectionByHandle($slug);
+      
+      case 'field':
+        return craft()->fields->getFieldByHandle($slug);
     }
     
     // 
