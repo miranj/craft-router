@@ -15,6 +15,7 @@ class Router_ListsController extends BaseController
       'entry' => 'section',
       'category' => 'group',
       'field' => 'handle',
+      'section' => 'value',
     );
     
     // First try and fetch the base section
@@ -103,6 +104,24 @@ class Router_ListsController extends BaseController
             
             case 'search':
               $criteria->search = isset($filter['value']) ? $filter['value'] : $value;
+              break;
+            
+            
+            
+            case 'section':
+              
+              // pre-set value (when present) overrides the URL value
+              $value = isset($filter['value']) ? $filter['value'] : $value;
+              
+              // look for the section object
+              $value = $this->fetchSingle($value, $filter['type']);
+              
+              // abort if no such section exists
+              if ($value === false || $value === null) {
+                throw new HttpException(404);
+              }
+              
+              $criteria->section = $value;
               break;
             
             
