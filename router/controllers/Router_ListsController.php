@@ -184,7 +184,7 @@ class Router_ListsController extends BaseController
    * Find the entry/category/section object by slug
    * 
    * @param     $slug   the slug/handle of the single object
-   * @param     $type   one of entry, section, category, field
+   * @param     $type   one of entry, section, category, field, uri
    * @param     $parent restrict search of the single object within
    *                    the parent's scope, where parent is a slug for
    *                    section in the case of type:entry, and
@@ -201,6 +201,9 @@ class Router_ListsController extends BaseController
       
       case 'field':
         return craft()->fields->getFieldByHandle($slug);
+      
+      case 'uri':
+        return craft()->elements->getElementByUri($slug, null, true);
     }
     
     // 
