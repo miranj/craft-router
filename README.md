@@ -59,20 +59,25 @@ Example
 
 return array(
   
-  'blog(/(?P<foodCategory>[^/]+))?(/(?P<year>\d{4}))?' => array(
+  '(?P<section>blog)'
+    .'(/(?P<foodCategory>[^/]+))?'
+    .'(/(?P<year>\d{4}))?'
+  => array(
     'action' => 'router/lists/applyFilters',
     'params' => array(
       
       // template file
       'template' => 'blog/_archive',
       
-      // the craft.entries.section handle
-      'list' => 'blog',
-      
       // array of filters that are activated when
       // the key matches a subpattern variable declared in
       // the route's regular expression
       'filters' => array(
+        
+        // Restrict entries to the selected section
+        'section' => array(
+          'type' => 'section',
+        ),
         
         // Filter entries by year
         'year' => array(

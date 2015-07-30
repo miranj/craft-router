@@ -9,7 +9,7 @@ class Router_ListsController extends BaseController
 {
   protected $allowAnonymous = true;
   
-  public function actionApplyFilters($list, array $filters = array(), $template, array $variables = array())
+  public function actionApplyFilters(array $filters = array(), $template, array $variables = array())
   {
     $shorthand_mappings = array(
       'entry' => 'section',
@@ -18,178 +18,171 @@ class Router_ListsController extends BaseController
       'section' => 'value',
     );
     
-    // First try and fetch the base section
-    $section = $this->fetchSingle($list, 'section');
+    $criteria = craft()->elements->getCriteria(ElementType::Entry);
     
-    if ($section) {
-      $criteria = craft()->elements->getCriteria(ElementType::Entry);
-      $criteria->section = $section;
-      
-      // Apply the filters
-      foreach ($filters as $trigger => $filter) {
-        if (is_string($filter)) {
-          $filter_args = explode(':', $filter);
-          $filter = array( 'type' => $filter_args[0] );
-          if (count($filter_args) > 1) {
-            $second_param_key = isset($shorthand_mappings[$filter['type']])
-              ? $shorthand_mappings[$filter['type']]
-              : 'group';
-            $filter[$second_param_key] = $filter_args[1];
-          }
-        }
-        
-        // Look for the filter key in the URL vars
-        if (isset($variables[$trigger]) and $variables[$trigger] !== '') {
-          $value = $variables[$trigger];
-          
-          switch ($filter['type']) {
-            case 'year':
-              
-              // year filter is applied on postDate by default
-              if (!isset($filter['field'])) {
-                $filter['field'] = 'postDate';
-              }
-              
-              // apply the filter
-              if ($filter['field'] == 'postDate') {
-                $criteria->after = $value;
-                $criteria->before = $value+1;
-              } else {
-                $criteria->{$filter['field']} = array(
-                  'and',
-                  ">= $value-01-01",
-                  '< '.($value+1).'-01-01',
-                );
-              }
-              break;
-            
-            
-            
-            case 'field':
-              
-              // complain if field handle hasn't been set
-              if (!isset($filter['handle'])) {
-                throw new Exception(
-                  'Field filters ("type" => "field") need '
-                  .'the field\'s handle ("handle" => "fieldHandle") to be declared.'
-                );
-              }
-              
-              $field = $this->fetchSingle($filter['handle'], 'field');
-              
-              // abort if no such field exists
-              if ($field === false) {
-                throw new HttpException(404);
-              }
-              
-              // Look for a matching option if the field has them
-              if ($field->fieldType instanceof BaseOptionsFieldType) {
-                $options = $field->fieldType->options;
-                foreach ($options as $option) {
-                  if ($option['value'] === $value) {
-                    $value = $option;
-                  }
-                }
-                
-                // abort if no such field option exists
-                if (!is_array($value)) {
-                  throw new HttpException(404);
-                }
-              } 
-              
-              $criteria->{$field['handle']} = $value;
-              break;
-            
-            
-            
-            case 'search':
-              $criteria->search = isset($filter['value']) ? $filter['value'] : $value;
-              break;
-            
-            
-            
-            case 'section':
-              
-              // pre-set value (when present) overrides the URL value
-              $value = isset($filter['value']) ? $filter['value'] : $value;
-              
-              // look for the section object
-              $value = $this->fetchSingle($value, $filter['type']);
-              
-              // abort if no such section exists
-              if ($value === false || $value === null) {
-                throw new HttpException(404);
-              }
-              
-              $criteria->section = $value;
-              break;
-            
-            
-            
-            case 'uri':
-            case 'category':
-            case 'entry':
-              
-              // look for the filter object's section (for entries)
-              // or group (for categories etc.)
-              $filter_parent = isset($filter['section'])
-                ? $filter['section']
-                : false;
-              $filter_parent = $filter_parent === false && isset($filter['group'])
-                ? $filter['group']
-                : false;
-              
-              // look for the object
-              $value = $this->fetchSingle($value, $filter['type'], $filter_parent);
-              
-              // abort if no such filter object exists
-              if ($value === false || $value === null) {
-                throw new HttpException(404);
-              }
-              
-              $relatedTo = array(
-                'element' => $value,
-              );
-              
-              // include descendants for categories and structures
-              // unless explicitly told not to
-              if (
-                (!isset($filter['includeDescendants']) || $filter['includeDescendants'])
-                && $value->hasDescendants()
-              ) {
-                $relatedTo['element'] = array($relatedTo['element'], $value->getDescendants());
-              }
-              
-              // specify a via relation if a field has been mentioned
-              if (isset($filter['field'])) {
-                $relatedTo['field'] = $filter['field'];
-              }
-              
-              // apply the filter
-              if (!$criteria->relatedTo) {
-                $criteria->relatedTo = array('and');
-              }
-              // push current filter to the end of the list of
-              // existing relatedTo conditions
-              $current_relations = $criteria->relatedTo;
-              $current_relations[] = $relatedTo;
-              $criteria->relatedTo = $current_relations;
-              break;
-          }
-          
-          // Update template variable with the new value
-          $variables[$trigger] = $value;
-          
-        } else {
-          
-          // Remove filters that aren't active in the current request
-          unset($variables[$trigger]);
+    // Apply the filters
+    foreach ($filters as $trigger => $filter) {
+      if (is_string($filter)) {
+        $filter_args = explode(':', $filter);
+        $filter = array( 'type' => $filter_args[0] );
+        if (count($filter_args) > 1) {
+          $second_param_key = isset($shorthand_mappings[$filter['type']])
+            ? $shorthand_mappings[$filter['type']]
+            : 'group';
+          $filter[$second_param_key] = $filter_args[1];
         }
       }
       
-      $variables['section'] = $section;
-      $variables['entries'] = $criteria;
+      // Look for the filter key in the URL vars
+      if (isset($variables[$trigger]) and $variables[$trigger] !== '') {
+        $value = $variables[$trigger];
+        
+        switch ($filter['type']) {
+          case 'year':
+            
+            // year filter is applied on postDate by default
+            if (!isset($filter['field'])) {
+              $filter['field'] = 'postDate';
+            }
+            
+            // apply the filter
+            if ($filter['field'] == 'postDate') {
+              $criteria->after = $value;
+              $criteria->before = $value+1;
+            } else {
+              $criteria->{$filter['field']} = array(
+                'and',
+                ">= $value-01-01",
+                '< '.($value+1).'-01-01',
+              );
+            }
+            break;
+          
+          
+          
+          case 'field':
+            
+            // complain if field handle hasn't been set
+            if (!isset($filter['handle'])) {
+              throw new Exception(
+                'Field filters ("type" => "field") need '
+                .'the field\'s handle ("handle" => "fieldHandle") to be declared.'
+              );
+            }
+            
+            $field = $this->fetchSingle($filter['handle'], 'field');
+            
+            // abort if no such field exists
+            if ($field === false) {
+              throw new HttpException(404);
+            }
+            
+            // Look for a matching option if the field has them
+            if ($field->fieldType instanceof BaseOptionsFieldType) {
+              $options = $field->fieldType->options;
+              foreach ($options as $option) {
+                if ($option['value'] === $value) {
+                  $value = $option;
+                }
+              }
+              
+              // abort if no such field option exists
+              if (!is_array($value)) {
+                throw new HttpException(404);
+              }
+            } 
+            
+            $criteria->{$field['handle']} = $value;
+            break;
+          
+          
+          
+          case 'search':
+            $criteria->search = isset($filter['value']) ? $filter['value'] : $value;
+            break;
+          
+          
+          
+          case 'section':
+            
+            // pre-set value (when present) overrides the URL value
+            $value = isset($filter['value']) ? $filter['value'] : $value;
+            
+            // look for the section object
+            $value = $this->fetchSingle($value, $filter['type']);
+            
+            // abort if no such section exists
+            if ($value === false || $value === null) {
+              throw new HttpException(404);
+            }
+            
+            $criteria->section = $value;
+            break;
+          
+          
+          
+          case 'uri':
+          case 'category':
+          case 'entry':
+            
+            // look for the filter object's section (for entries)
+            // or group (for categories etc.)
+            $filter_parent = isset($filter['section'])
+              ? $filter['section']
+              : false;
+            $filter_parent = $filter_parent === false && isset($filter['group'])
+              ? $filter['group']
+              : false;
+            
+            // look for the object
+            $value = $this->fetchSingle($value, $filter['type'], $filter_parent);
+            
+            // abort if no such filter object exists
+            if ($value === false || $value === null) {
+              throw new HttpException(404);
+            }
+            
+            $relatedTo = array(
+              'element' => $value,
+            );
+            
+            // include descendants for categories and structures
+            // unless explicitly told not to
+            if (
+              (!isset($filter['includeDescendants']) || $filter['includeDescendants'])
+              && $value->hasDescendants()
+            ) {
+              $relatedTo['element'] = array($relatedTo['element'], $value->getDescendants());
+            }
+            
+            // specify a via relation if a field has been mentioned
+            if (isset($filter['field'])) {
+              $relatedTo['field'] = $filter['field'];
+            }
+            
+            // apply the filter
+            if (!$criteria->relatedTo) {
+              $criteria->relatedTo = array('and');
+            }
+            // push current filter to the end of the list of
+            // existing relatedTo conditions
+            $current_relations = $criteria->relatedTo;
+            $current_relations[] = $relatedTo;
+            $criteria->relatedTo = $current_relations;
+            break;
+        }
+        
+        // Update template variable with the new value
+        $variables[$trigger] = $value;
+        
+      } else {
+        
+        // Remove filters that aren't active in the current request
+        unset($variables[$trigger]);
+      }
     }
+    
+    $variables['entries'] = $criteria;
     
     
     // All done, render the template
