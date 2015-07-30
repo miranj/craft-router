@@ -105,6 +105,9 @@ class Router_ListsController extends BaseController
               $criteria->search = isset($filter['value']) ? $filter['value'] : $value;
               break;
             
+            
+            
+            case 'uri':
             case 'category':
             case 'entry':
               
@@ -121,7 +124,7 @@ class Router_ListsController extends BaseController
               $value = $this->fetchSingle($value, $filter['type'], $filter_parent);
               
               // abort if no such filter object exists
-              if ($value === false) {
+              if ($value === false || $value === null) {
                 throw new HttpException(404);
               }
               
