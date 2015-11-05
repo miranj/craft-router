@@ -49,6 +49,22 @@ It currently offers one controller `router/lists` with one action `applyFilters`
 
 [rca]:http://buildwithcraft.com/docs/routing#routing-to-controller-actions "Routing to Controller Actions - Craft Docs"
 
+The `applyFilters` action takes three parameters:
+
+- `$template` — The template path that is used to render the request.
+    
+- `$variables` — An array of variables specific to the current URL / route being handled. _This parameter is automatically set by Craft_, based on the named subpatterns in the route's regular expression.
+
+- `$filters` — An array of filter specifications. This is the plugin's workhorse parameter. Filters follow this syntax:
+  ```php  
+    'trigger_key' => array(
+        'type' => '',
+        … // extra filter parameters
+    ),
+  ```
+
+A filter is activated when the corresponding trigger key (named subpattern) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an ElementCriteriaModel object. This is repeated for every activated filter, and the resulting ElementCriteriaModel object is passed on the template as the `entries` variable.
+
 
 
 Example
@@ -59,9 +75,9 @@ Example
 
 return array(
   
-  '(?P<section>blog)'
+  '(?P<sectionHandle>blog)'
     .'(/(?P<foodCategory>[^/]+))?'
-    .'(/(?P<year>\d{4}))?'
+    .'(/(?P<yearPublished>\d{4}))?'
   => array(
     'action' => 'router/lists/applyFilters',
     'params' => array(
@@ -75,12 +91,12 @@ return array(
       'filters' => array(
         
         // Restrict entries to the selected section
-        'section' => array(
+        'sectionHandle' => array(
           'type' => 'section',
         ),
         
         // Filter entries by year
-        'year' => array(
+        'yearPublished' => array(
           'type' => 'year',
           'field'=> 'postDate',
         ),
