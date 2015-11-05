@@ -63,7 +63,9 @@ The `applyFilters` action takes three parameters:
     ),
   ```
 
-A filter is activated when the corresponding trigger key (named subpattern) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an ElementCriteriaModel object. This is repeated for every activated filter, and the resulting ElementCriteriaModel object is passed on the template as the `entries` variable.
+A filter is activated when the corresponding trigger key (named subpattern) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [ElementCriteriaModel][ecm] object. This is repeated for every activated filter, and the resulting ElementCriteriaModel object is passed on the template as the `entries` variable.
+
+[ecm]:http://buildwithcraft.com/docs/templating/elementcriteriamodel
 
 
 
@@ -75,9 +77,12 @@ Example
 
 return array(
   
+  
+  // URI pattern with named subpatterns
   '(?P<sectionHandle>blog)'
-    .'(/(?P<foodCategory>[^/]+))?'
+    .'(/(?P<foodCategorySlug>[^/]+))?'
     .'(/(?P<yearPublished>\d{4}))?'
+    
   => array(
     'action' => 'router/lists/applyFilters',
     'params' => array(
@@ -103,7 +108,7 @@ return array(
         
         // Filter entries by categories
         // from the group with the handle 'food'
-        'foodCategory' => array(
+        'foodCategorySlug' => array(
           'type' => 'category',
           'group'=> 'food',
         ),
