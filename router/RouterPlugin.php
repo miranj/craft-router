@@ -22,6 +22,16 @@ class RouterPlugin extends BasePlugin
   {
       return 'http://miranj.in';
   }
+  
+  function getDocumentationUrl()
+  {
+      return 'https://github.com/miranj/craft-router/blob/master/README.md#usage';
+  }
+  
+  function getDescription()
+  {
+      return 'Route URLs with a preloaded ElementCriteriaModel object.';
+  }
 }
 
 
