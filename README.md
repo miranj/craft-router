@@ -36,8 +36,25 @@ for the URL "blog/2015/01" contain blog posts published in January 2015, or for 
 Installation
 ------------
 
-1. Place the `router` folder inside your `craft/plugins/` folder.
-2. Go to Settings > Plugins inside your Control Panel and install **Router**.
+You can install this plugin from the [Plugin Store][ps] or with Composer.
+
+[ps]:https://plugins.craftcms.com/router
+
+#### From the Plugin Store
+Go to the Plugin Store in your project’s Control Panel and search for “Router”.
+Then click on the “Install” button in its modal window.
+
+#### Using Composer
+Open your terminal and run the following commands:
+
+    # go to the project directory
+    cd /path/to/project
+    
+    # tell composer to use the plugin
+    composer require miranj/craft-router
+    
+    # tell Craft to install the plugin
+    ./craft install/plugin router
 
 
 
