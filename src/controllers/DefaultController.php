@@ -48,6 +48,7 @@ class DefaultController extends Controller
             'entry' => 'section',
             'category' => 'group',
             'field' => 'handle',
+            'year' => 'field',
             'section' => 'value',
         ];
         

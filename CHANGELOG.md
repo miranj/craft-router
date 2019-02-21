@@ -8,6 +8,7 @@ Release notes for the Router Craft CMS plugin.
 
 ### Added
 - Added Craft 3 compatibility.
+- Added shorthand for Year filter's `field` config
 
 
 ## 0.2 - 2015-07-30
