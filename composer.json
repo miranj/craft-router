@@ -1,0 +1,39 @@
+{
+  "name": "miranj/craft-router",
+  "description": "Craft CMS plugin to route requests to pages with filtered, pre-loaded lists of entries.",
+  "type": "craft-plugin",
+  "version": "1.0.0-dev",
+  "keywords": [
+    "craft",
+    "craftcms",
+    "url",
+    "router",
+    "filters"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Miranj",
+      "homepage": "https://miranj.in"
+    }
+  ],
+  "support": {
+    "docs": "https://github.com/miranj/craft-router/blob/v1/README.md",
+    "issues": "https://github.com/miranj/craft-router/issues",
+    "source": "https://github.com/miranj/craft-router"
+  },
+  "require": {
+    "craftcms/cms": "^3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "miranj\\router\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Router",
+    "handle": "router",
+    "changelogUrl": "https://raw.githubusercontent.com/miranj/craft-router/v1/CHANGELOG.md",
+    "class": "miranj\\router\\Plugin"
+  }
+}
