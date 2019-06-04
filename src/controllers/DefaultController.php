@@ -80,16 +80,11 @@ class DefaultController extends Controller
                         }
                         
                         // apply the filter
-                        if ($filter['field'] == 'postDate') {
-                            $criteria->after($value . '-01-01');
-                            $criteria->before(($value + 1) . '-01-01');
-                        } else {
-                            $criteria->{$filter['field']}([
-                                'and',
-                                ">= $value-01-01",
-                                '< '.($value+1).'-01-01',
-                            ]);
-                        }
+                        $criteria->{$filter['field']}([
+                            'and',
+                            ">= $value-01-01",
+                            '< '.($value+1).'-01-01',
+                        ]);
                         break;
                     
                     
