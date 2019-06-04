@@ -49,6 +49,7 @@ class DefaultController extends Controller
             'category' => 'group',
             'field' => 'handle',
             'year' => 'field',
+            'date' => 'field',
             'section' => 'value',
         ];
         
@@ -72,9 +73,24 @@ class DefaultController extends Controller
                 $value = $variables[$trigger];
                 
                 switch ($filter['type']) {
-                    case 'year':
+                    case 'year': // legacy year-only filter
+                    case 'date': // year [/ month [/ date]] filter
                         
-                        // year filter is applied on postDate by default
+                        $date = explode('/', $value);
+                        $date_keys = ['year', 'month', 'day'];
+                        $full_date = array_pad($date, 3, '01');
+                        
+                        // Do not proceed if the date is invalid
+                        if (checkdate($full_date[1], $full_date[2], $full_date[0]) === false) {
+                            throw new NotFoundHttpException();
+                        }
+                        
+                        // Build query limits
+                        $after_date = \DateTime::createFromFormat('Y-m-d', implode('-', $full_date));
+                        $before_date = clone $after_date;
+                        $before_date->modify('next '.$date_keys[count($date)-1]);
+                        
+                        // date filter is applied on postDate by default
                         if (!isset($filter['field'])) {
                             $filter['field'] = 'postDate';
                         }
@@ -82,9 +98,15 @@ class DefaultController extends Controller
                         // apply the filter
                         $criteria->{$filter['field']}([
                             'and',
-                            ">= $value-01-01",
-                            '< '.($value+1).'-01-01',
+                            ">= ".$after_date->format('Y-m-d'),
+                            '< '.$before_date->format('Y-m-d'),
                         ]);
+                        
+                        // Update filter value for 'date' filter
+                        // Do not modify filter value for legacy 'year' filter
+                        if ($filter['type'] === 'date') {
+                            $value = array_combine(array_slice($date_keys, 0, count($date)), $date);
+                        }
                         break;
                     
                     
