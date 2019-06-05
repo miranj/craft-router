@@ -107,52 +107,50 @@ Example
 -------
 
 ```php
-/* craft/config/routes.php */
+/* config/router.php */
 
-return array(
+return [
+  'rules' => [
   
-  
-  // URI pattern with named subpatterns
-  '(?P<sectionHandle>blog)'
-    .'(/(?P<foodCategorySlug>[^/]+))?'
-    .'(/(?P<yearPublished>\d{4}))?'
-    
-  => array(
-    'action' => 'router/lists/applyFilters',
-    'params' => array(
-      
-      // template file
-      'template' => 'blog/_archive',
+    // URI pattern with named subpatterns
+    '<sectionHandle:blog>' => [
+      'segments' => [
+        '<foodCategorySlug:[^/]+>',
+        '<yearPublished:\d{4}>',
+      ],
       
       // array of filters that are activated when
       // the key matches a subpattern variable declared in
       // the route's regular expression
-      'filters' => array(
+      'criteria' => [
         
         // Restrict entries to the selected section
-        'sectionHandle' => array(
+        'sectionHandle' => [
           'type' => 'section',
-        ),
+        ],
         
         // Filter entries by year
-        'yearPublished' => array(
+        'yearPublished' => [
           'type' => 'year',
           'field'=> 'postDate',
-        ),
+        ],
         
         // Filter entries by categories
         // from the group with the handle 'food'
-        'foodCategorySlug' => array(
+        'foodCategorySlug' => [
           'type' => 'category',
           'group'=> 'food',
-        ),
-      ),
-    ),
-  ),
-
-);
+        ],
+      ],
+      
+      // template file
+      'template' => 'blog/_archive',
+    ],
+    
+  ],
+];
 ```
 
 
 
-[craft]:http://buildwithcraft.com/
+[craft]:https://craftcms.com/
