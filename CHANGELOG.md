@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Fixed
+- Fixed bug where top level URL rule (with no segments) would get registered twice.
+
+
+
 ## 1.0.0-beta.1 - 2019-06-05
 
 ### Added

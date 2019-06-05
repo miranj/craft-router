@@ -66,7 +66,6 @@ class Plugin extends \craft\base\Plugin
                 'route' => 'router/default/index',
                 'params' => $ruleConfig,
             ];
-            $rules[] = $baseRule;
             
             // Add all possible sub-rules using the same base config
             $segmentCombinations = generator($basePattern, $ruleSegments);
