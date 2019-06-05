@@ -3,6 +3,20 @@ Router
 
 A [Craft CMS][craft] plugin to route requests to pages with a filtered, pre-loaded list of entries.
 
+[craft]:https://craftcms.com/
+
+
+
+Contents
+--------
+- [Why](#why)
+- [Usage](#usage)
+- [Example](#example)
+- [Installation](#installation)
+- [Requirements](#requirements)
+- [Changelog](./CHANGELOG.md)
+- [License](./LICENSE)
+
 
 
 Why
@@ -30,31 +44,6 @@ It adds a new template variable `entries` which can be configured to,
 for the URL "blog/2015/01" contain blog posts published in January 2015, or for the URL "blog/dim-sums/2014" show blog posts published in 2014 under the category "Dim sums".
 
 [ar]:http://buildwithcraft.com/docs/routing#advanced-routing "Advanced Routing - Craft Docs"
-
-
-
-Installation
-------------
-
-You can install this plugin from the [Plugin Store][ps] or with Composer.
-
-[ps]:https://plugins.craftcms.com/router
-
-#### From the Plugin Store
-Go to the Plugin Store in your project’s Control Panel and search for “Router”.
-Then click on the “Install” button in its modal window.
-
-#### Using Composer
-Open your terminal and run the following commands:
-
-    # go to the project directory
-    cd /path/to/project
-    
-    # tell composer to use the plugin
-    composer require miranj/craft-router
-    
-    # tell Craft to install the plugin
-    ./craft install/plugin router
 
 
 
@@ -153,4 +142,37 @@ return [
 
 
 
-[craft]:https://craftcms.com/
+Installation
+------------
+
+You can install this plugin from the [Plugin Store][ps] or with Composer.
+
+[ps]:https://plugins.craftcms.com/router
+
+#### From the Plugin Store
+Go to the Plugin Store in your project’s Control Panel and search for “Router”.
+Then click on the “Install” button in its modal window.
+
+#### Using Composer
+Open your terminal and run the following commands:
+
+    # go to the project directory
+    cd /path/to/project
+    
+    # tell composer to use the plugin
+    composer require miranj/craft-router
+    
+    # tell Craft to install the plugin
+    ./craft install/plugin router
+
+
+
+Requirements
+------------
+This plugin requires Craft CMS 3.0.0 or later. The Craft 2 version is availabe in [the `v0` branch](https://github.com/miranj/craft-router/tree/v0).
+
+
+
+---
+
+Brought to you by [Miranj](https://miranj.in/)
