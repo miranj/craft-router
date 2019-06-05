@@ -127,7 +127,7 @@ return [
     // URI pattern with named subpatterns
     '<sectionHandle:blog>' => [
       'segments' => [
-        '<foodCategorySlug:[^/]+>',
+        '<foodCategorySlug:{slug}>',
         '<yearPublished:\d{4}>',
       ],
       
