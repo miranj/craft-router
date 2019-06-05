@@ -4,12 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.0.0-beta.1 - 2019-06-05
 
 ### Added
 - Added Craft 3 compatibility.
 - Added shorthand for Year filter's `field` config
 - Added new Date filter with support for year/month/day
+
 
 
 ## 0.2 - 2015-07-30
