@@ -1,7 +1,7 @@
 Router
 ======
 
-A [Craft CMS][craft] plugin to route requests to pages with a filtered, pre-loaded list of entries.
+A [Craft CMS][craft] 3 plugin to route requests to pages with a filtered, pre-loaded list of entries.
 
 [craft]:https://craftcms.com/
 
@@ -23,55 +23,78 @@ Why
 ---
 
 Craft makes it straightforward to declare [dynamic routes as regular expressions][ar]
-and redirect them to be handled by a template file. However, the templates themselves
-remain dumb handlers. They may optionally be passed on some context in the form of (named)
-subpattern matches variables but they have to do the heavy lifting of building the data set
+and redirect them to be handled by a template. However, the templates themselves
+remain dumb handlers. They may optionally be passed on some context in the form of [named
+parameters][yii routing] but they have to do the heavy lifting of building the data set
 required for rendering the page.
 
-This is not a problem for pages with one or two variables, like a blog's year and month archive
-(e.g. "blog/2015/01").
+This may not be a problem for pages with one or two variables,
+like a blog's _yearly_ and _monthly_ archives (e.g. "blog/2015/01").
 The template would fetch the list of posts from `craft.entries` and narrow the range
 depending on if the year and month variables are set.
 
 But what if the blog also added a category page (e.g. "blog/street-food")?
 And what if the category pages suppored their own yearly and monthly archive pages
 (e.g. "blog/dim-sums/2014")? We would either end up duplicating the code to fetch posts
-by creating a copy of the archive template, or end up adding the logic to handle category,
-year and month _filters_ while fetching posts in the same template and increasing its overall complexity.
+by creating multiple copies of the archive template, or end up adding the logic to handle category,
+year, and month _filters_ all in a single template and increasing its overall complexity.
 
-This plugin exists to handle the filtering of entries based on URL parameters.
-It adds a new template variable `entries` which can be configured to,
-for the URL "blog/2015/01" contain blog posts published in January 2015, or for the URL "blog/dim-sums/2014" show blog posts published in 2014 under the category "Dim sums".
+The Router plugin attempts to solve this problem by taking on the job of filtering entries
+based on URL parameters. It adds a new template variable `entries` which can be configured to,
+for the URL "blog/2015/01" contain blog posts published in January 2015, or for the URL "blog/dim-sums/2014" to show blog posts published in 2014 under the category "Dim sums".
 
-[ar]:http://buildwithcraft.com/docs/routing#advanced-routing "Advanced Routing - Craft Docs"
+[ar]:https://docs.craftcms.com/v3/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft 3 Documentation"
+[yii routing]:https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#named-parameters "Handling Requests: Routing and URL Creation | Yii 2.0"
 
 
 
 Usage
 -----
 
-The plugin works by [routing requests through new controller actions][rca].
-It currently offers one controller `router/lists` with one action `applyFilters`.
+In order to create URL rules that automatically build an [Entry Query][eq] based on the URL,
+you will need to create a `router.php` file in your config folder, adjacent to your existing
+`routes.php` file.
 
-[rca]:http://buildwithcraft.com/docs/routing#routing-to-controller-actions "Routing to Controller Actions - Craft Docs"
+[eq]:https://docs.craftcms.com/v3/dev/element-queries/entry-queries.html
 
-The `applyFilters` action takes three parameters:
+Each rule expects the following parameters:
 
-- `$template` — The template path that is used to render the request.
-    
-- `$variables` — An array of variables specific to the current URL / route being handled. _This parameter is automatically set by Craft_, based on the named subpatterns in the route's regular expression.
-
-- `$filters` — An array of filter specifications. This is the plugin's workhorse parameter. Filters follow this syntax:
-  ```php  
-    'trigger_key' => array(
-        'type' => '',
-        … // extra filter parameters
-    ),
+- `segments` — An array of optional URL segment rules. Example:
+  ```php
+    [
+      '<year:\d{4}>',
+      '<category:{slug}>',  // eg. budget, luxury, cruise, urban
+      '<location:{slug}>',  // eg. asia, europe, australia
+    ]
+    /*
+      This will match the following URL suffixes
+      …/2019
+      …/2019/budget
+      …/2019/budget/asia
+      …/2019/asia
+      …/budget
+      …/budget/asia
+      …/asia
+      
+      Order is relevant, so it will *not* match the following URLs
+      …/budget/2019
+      …/asia/budget
+      …/2019/asia/budget
+    */
   ```
 
-A filter is activated when the corresponding trigger key (named subpattern) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [ElementCriteriaModel][ecm] object. This is repeated for every activated filter, and the resulting ElementCriteriaModel object is passed on the template as the `entries` variable.
+- `criteria` — An array of filters for the Entry Query. Example:
+  ```php
+    [
+      'year' => [ 'type' => 'year', 'field' => 'postDate' ],
+      'category' => [ 'type' => 'category', 'group' => 'tripCategories' ],
+      'location' => [ 'type' => 'entry', 'section' => 'locations' ],
+    ]
+  ```
+  
+- `template` — The template path used to render the request.
 
-[ecm]:http://buildwithcraft.com/docs/templating/elementcriteriamodel
+A filter is activated when the corresponding trigger key (named parameter) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [Entry Query][eq] object. This is repeated for every activated filter, and the resulting Entry Query is passed on to the template as the `entries` variable.
 
 ### Filter Types
 
@@ -85,10 +108,10 @@ The plugin currently supports the following different types of filters:
 - `uri` — Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The Entry's search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation's field can be specified using the optional param `field`. Set the filter's `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
 - `year` — Adds a date range criteria for the given year on optional param `field` (which defaults to `postDate`).
 
-[cat]:http://buildwithcraft.com/docs/categories
-[entry]:http://buildwithcraft.com/docs/templating/entrymodel
-[sec]:http://buildwithcraft.com/docs/sections-and-entries#sections
-[search]:http://buildwithcraft.com/docs/searching
+[cat]:https://docs.craftcms.com/v3/categories.html
+[entry]:https://docs.craftcms.com/v3/sections-and-entries.html#entries
+[sec]:https://docs.craftcms.com/v3/sections-and-entries.html#sections
+[search]:https://docs.craftcms.com/v3/searching.html
 
 
 
