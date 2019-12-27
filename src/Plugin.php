@@ -13,6 +13,7 @@ namespace miranj\router;
 use Craft;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
+use miranj\router\models\Settings;
 use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
@@ -33,50 +34,20 @@ class Plugin extends \craft\base\Plugin
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             [$this, 'registerUrlRules']
         );
+        
+        Craft::info(
+            Craft::t(
+                'router',
+                '{name} plugin loaded',
+                ['name' => $this->name]
+            ),
+            __METHOD__
+        );
     }
     
     public function registerUrlRules(RegisterUrlRulesEvent $event)
     {
-        $event->rules = array_merge($event->rules, $this->buildUrlRules());
-    }
-    
-    public function buildUrlRules(): array
-    {
-        $rules = [];
-        
-        // Build a sequential combination of all sub-urls
-        // treating each segment as optional
-        function generator(string $base, array $segments) {
-            $list = [$base];
-            foreach ($segments as $index => $segment) {
-                $list = array_merge($list, generator(
-                    $base.'/'.$segment,
-                    array_slice($segments, $index + 1)
-                ));
-            }
-            return $list;
-        }
-        
-        foreach ($this->getSettings()->rules as $basePattern => $ruleConfig) {
-            $ruleSegments = $ruleConfig['segments'] ?? [];
-            unset($ruleConfig['segments']);
-            
-            $baseRule = [
-                'pattern' => $basePattern,
-                'route' => 'router/default/index',
-                'params' => $ruleConfig,
-            ];
-            
-            // Add all possible sub-rules using the same base config
-            $segmentCombinations = generator($basePattern, $ruleSegments);
-            foreach ($segmentCombinations as $segment) {
-                $subRule = $baseRule;
-                $subRule['pattern'] = $segment;
-                $rules[] = $subRule;
-            }
-        }
-        
-        return $rules;
+        $event->rules = array_merge($event->rules, $this->getSettings()->normalizedRoutes);
     }
     
     
@@ -84,7 +55,7 @@ class Plugin extends \craft\base\Plugin
     // Protected Methods
     // =========================================================================
     
-    protected function createSettingsModel()
+    protected function createSettingsModel(): Settings
     {
         return new Settings();
     }
