@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.0.0-beta.2 - 2019-12-27
 
 ### Added
 - Added a `router` service
