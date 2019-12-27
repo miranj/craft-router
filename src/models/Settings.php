@@ -8,6 +8,19 @@ class Settings extends Model
 {
     public $rules = [];
     
+    public function getRoutes(): array
+    {
+        $routes = $this->rules;
+        
+        foreach ($routes as $baseSegment => $config) {
+            if (!isset($config['name'])) {
+                $routes[$baseSegment]['name'] = $baseSegment;
+            }
+        }
+        
+        return $routes;
+    }
+    
     /**
      * Transforms router config into Yii compatible UrlRules
      * https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#url-rules
@@ -48,7 +61,7 @@ class Settings extends Model
             return $list;
         }
         
-        foreach ($this->rules as $basePattern => $ruleConfig) {
+        foreach ($this->routes as $basePattern => $ruleConfig) {
             $ruleSegments = $ruleConfig['segments'] ?? [];
             unset($ruleConfig['segments']);
             

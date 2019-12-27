@@ -30,7 +30,7 @@ class DefaultController extends Controller
     // Public Methods
     // =========================================================================
     
-    public function bindActionParams($action, $params)
+    public function bindActionParams($action, $params): array
     {
         // remove the request path string passed to Craft
         unset($params[Craft::$app->config->general->pathParam]);
@@ -40,6 +40,12 @@ class DefaultController extends Controller
         
         $criteria = $params['criteria'] ?? [];
         unset($params['criteria']);
+        
+        // remove route name param, if set
+        if (isset($params['name'])) {
+            $this->routerService->setRouteName($params['name']);
+            unset($params['name']);
+        }
         
         $newParams = [
             $template,
