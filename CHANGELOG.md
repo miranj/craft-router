@@ -6,6 +6,15 @@ Release notes for the Router Craft CMS plugin.
 
 ## Unreleased
 
+### Added
+- Added a `router` service
+- Added a `craft.router` Twig global variable
+- Added `craft.router.params()` to access all named params from the URL
+- Added `craft.router.rawParams()` to access all named params (with raw values) from the URL
+- Added `miranj\router\services\Router`
+- Added `miranj\router\services\Router::getParams()`
+- Added `miranj\router\services\Router::getRawParams()`
+
 ### Fixed
 - Fixed bug where top level URL rule (with no segments) would get registered twice.
 

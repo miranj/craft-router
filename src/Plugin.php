@@ -12,8 +12,10 @@ namespace miranj\router;
 
 use Craft;
 use craft\events\RegisterUrlRulesEvent;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use miranj\router\models\Settings;
+use miranj\router\services\Router;
 use yii\base\Event;
 
 class Plugin extends \craft\base\Plugin
@@ -29,11 +31,20 @@ class Plugin extends \craft\base\Plugin
     {
         parent::init();
         
+        // Set services as components
+        $this->set('router', Router::class);
+        
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             [$this, 'registerUrlRules']
         );
+        
+        // Attach services to the Craft variable
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $e) {
+            $variable = $e->sender;
+            $variable->set('router', $this->get('router'));
+        });
         
         Craft::info(
             Craft::t(

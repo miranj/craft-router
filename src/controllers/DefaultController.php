@@ -10,12 +10,20 @@ use Craft;
 use craft\elements\Entry;
 use craft\fields\BaseOptionsField;
 use craft\web\Controller;
+use miranj\router\Plugin;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class DefaultController extends Controller
 {
     protected $allowAnonymous = true;
+    protected $routerService = null;
+    
+    public function init()
+    {
+        parent::init();
+        $this->routerService = Plugin::getInstance()->router;
+    }
     
     
     
@@ -225,6 +233,7 @@ class DefaultController extends Controller
                 }
                 
                 // Update template variable with the new value
+                $this->routerService->setParam($trigger, $variables[$trigger], $value);
                 $variables[$trigger] = $value;
                 
             } else {
