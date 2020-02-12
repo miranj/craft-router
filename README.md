@@ -107,12 +107,14 @@ Type       | Description
 `field`    | Adds a field criteria to the field specified by `handle` (required param).
 `search`   | Adds a [`search`][search] criteria. Criteria value can be overidden using the optional param `value`.
 `section`  | Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle value can be overidden using the optional param `value`.
+`type`     | Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle value can be overidden using the optional param `value`.
 `uri`      | Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The Entry's search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation's field can be specified using the optional param `field`. Set the filter's `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
 `year`     | Adds a date range criteria for the given year on optional param `field` (which defaults to `postDate`).
 
 [cat]:https://docs.craftcms.com/v3/categories.html
 [entry]:https://docs.craftcms.com/v3/sections-and-entries.html#entries
 [sec]:https://docs.craftcms.com/v3/sections-and-entries.html#sections
+[type]:https://docs.craftcms.com/v3/sections-and-entries.html#entry-types
 [search]:https://docs.craftcms.com/v3/searching.html
 
 

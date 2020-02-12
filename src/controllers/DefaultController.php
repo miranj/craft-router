@@ -186,6 +186,22 @@ class DefaultController extends Controller
                     
                     
                     
+                    case 'type':
+                        
+                        // pre-set value (when present) overrides the URL value
+                        $value = isset($filter['value']) ? $filter['value'] : $value;
+                        
+                        // abort if no value or no valid EntryType exists
+                        if ($value === false || $value === null
+                        || empty(Craft::$app->sections->getEntryTypesByHandle($value))) {
+                            throw new NotFoundHttpException();
+                        }
+                        
+                        $criteria->type($value);
+                        break;
+                    
+                    
+                    
                     case 'uri':
                     case 'category':
                     case 'entry':
