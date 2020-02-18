@@ -4,10 +4,10 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.0.0-beta.3 - 2020-02-18
 
 ### Added
-- Added a new EntryType filter
+- Added a new Entry Type filter
 
 
 
