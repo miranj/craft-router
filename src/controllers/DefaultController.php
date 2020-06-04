@@ -318,6 +318,7 @@ class DefaultController extends Controller
         
         $criteria = $elementType::find();
         $criteria->slug($slug);
+        $criteria->site('*')->unique();
         if ($parent) {
             $criteria->{ $type == 'entry' ? 'section' : 'group' }($parent);
         }

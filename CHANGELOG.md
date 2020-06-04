@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Changed
+- `miranj\router\controllers\DefaultController::fetchSingle()` now queries across multiple sites, along with [`unique()`](https://docs.craftcms.com/v3/dev/element-queries/entry-queries.html#parameters).
+
+
+
 ## 1.0.0-beta.3 - 2020-02-18
 
 ### Added
