@@ -36,7 +36,7 @@ The template would fetch the list of posts from `craft.entries` and narrow the r
 depending on if the `year` and `month` variables are set.
 
 But what if the blog also added a category page (e.g. `blog/street-food`)?
-And what if the category pages suppored their own yearly and monthly archive pages
+And what if the category pages supported their own yearly and monthly archive pages
 (e.g. `blog/dim-sums/2014`)? We would either end up duplicating the code to fetch posts
 by creating multiple copies of the archive template, or end up adding the logic to handle category,
 year, and month _filters_ all in a single template and increasing its overall complexity.
@@ -104,7 +104,7 @@ The plugin currently supports the following different types of filters:
 
 Type       | Description
 :---       | :---
-`category` | Adds a `relatedTo` criteria to the [Category][cat] with the given slug, and any of its descendants. The Category’s search can be scoped by specifying a Categroy Group handle in the optional param `group`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Categories to be included in the `relatedTo` criteria.
+`category` | Adds a `relatedTo` criteria to the [Category][cat] with the given slug, and any of its descendants. The Category’s search can be scoped by specifying a Category Group handle in the optional param `group`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Categories to be included in the `relatedTo` criteria.
 `entry`    | Adds a `relatedTo` criteria to the [Entry][] with the given slug, and any of its descendants. The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
 `field`    | Adds a field criteria to the field specified by `handle` (required param).
 `search`   | Adds a [`search`][search] criteria. Criteria value can be overidden using the optional param `value`.
@@ -125,6 +125,7 @@ Example
 -------
 
 ```php
+<?php
 /* config/router.php */
 
 return [
