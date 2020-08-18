@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.0.0 - 2020-08-19
 
 ### Added
 - Added a plugin icon.

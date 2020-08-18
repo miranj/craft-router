@@ -201,7 +201,7 @@ Open your terminal and run the following commands:
     cd /path/to/project
     
     # tell composer to use the plugin
-    composer require miranj/craft-router:"^1.0-beta"
+    composer require miranj/craft-router
     
     # tell Craft to install the plugin
     ./craft install/plugin router
