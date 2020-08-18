@@ -13,7 +13,9 @@ Contents
 --------
 - [Why](#why)
 - [Usage](#usage)
-- [Example](#example)
+  - [Example](#example)
+  - [Parameters](#parameters)
+  - [Filters](#filter-types)
 - [Installation](#installation)
 - [Requirements](#requirements)
 - [Changelog](./CHANGELOG.md)
@@ -35,15 +37,15 @@ like a blog's _year_ and _month_ archives (e.g. `blog/2015/01`).
 The template would fetch the list of posts from `craft.entries` and narrow the range
 depending on if the `year` and `month` variables are set.
 
-But what if the blog also added a category page (e.g. `blog/street-food`)?
+But what if the blog also added a category page (e.g. `blog/camping`)?
 And what if the category pages supported their own yearly and monthly archive pages
-(e.g. `blog/dim-sums/2014`)? We would either end up duplicating the code to fetch posts
+(e.g. `blog/camping/2014`)? We would either end up duplicating the code to fetch posts
 by creating multiple copies of the archive template, or end up adding the logic to handle category,
 year, and month _filters_ all in a single template and increasing its overall complexity.
 
 The Router plugin attempts to solve this problem by taking on the job of filtering entries
 based on URL parameters. It adds a new template variable `entries` which can be configured to,
-for the URL `blog/2015/01` contain blog posts published in January 2015, or for the URL `blog/dim-sums/2014` to show blog posts published in 2014 under the category "Dim sums".
+for the URL `blog/2015/01` contain blog posts published in January 2015, or for the URL `blog/camping/2014` to show blog posts published in 2014 under the category "Camping".
 
 [ar]:https://docs.craftcms.com/v3/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft 3 Documentation"
 [yii routing]:https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#named-parameters "Handling Requests: Routing and URL Creation | Yii 2.0"
@@ -59,6 +61,65 @@ you will need to create a `router.php` file in your config folder, adjacent to y
 
 [eq]:https://docs.craftcms.com/v3/dev/element-queries/entry-queries.html
 
+
+### Example
+
+```php
+<?php
+/* config/router.php */
+
+return [
+  'rules' => [
+  
+    // URI pattern with named subpatterns
+    '<section:blog>' => [
+      'segments' => [
+        '<year:\d{4}>',
+        '<category:{slug}>',
+        'in:<location:{slug}>',
+      ],
+      
+      // array of filters that are activated when
+      // the key matches a subpattern variable declared in
+      // the route's regular expression
+      'criteria' => [
+        
+        // Restrict entries to the selected section
+        'section' => [
+          'type' => 'section',
+        ],
+        
+        // Filter entries by year
+        'year' => [
+          'type' => 'year',
+          'field' => 'postDate',
+        ],
+        
+        // Filter entries by related category
+        // from the category group with the handle 'travel-styles'
+        'category' => [
+          'type' => 'category',
+          'group' => 'travel-styles',
+        ],
+        
+        // Filter entries by related entry
+        // from the section with the handle 'locations'
+        'category' => [
+          'type' => 'entry',
+          'section' => 'locations',
+        ],
+      ],
+      
+      // template file
+      'template' => 'blog/_archive',
+    ],
+    
+  ],
+];
+```
+
+### Parameters
+
 Each rule expects the following parameters:
 
 - `segments` — An array of optional URL segment rules. Example:
@@ -66,22 +127,22 @@ Each rule expects the following parameters:
     [
       '<year:\d{4}>',
       '<category:{slug}>',  // eg. budget, luxury, cruise, urban
-      '<location:{slug}>',  // eg. asia, europe, australia
+      'in:<location:{slug}>',  // eg. asia, europe, australia
     ]
     /*
       This will match the following URL suffixes
       …/2019
       …/2019/budget
-      …/2019/budget/asia
-      …/2019/asia
+      …/2019/budget/in:asia
+      …/2019/in:asia
       …/budget
-      …/budget/asia
+      …/budget/in:asia
       …/asia
       
       Order is relevant, so it will *not* match the following URLs
       …/budget/2019
-      …/asia/budget
-      …/2019/asia/budget
+      …/in:asia/budget
+      …/2019/in:asia/budget
     */
   ```
 
@@ -97,6 +158,7 @@ Each rule expects the following parameters:
 - `template` — The template path used to render the request.
 
 A filter is activated when the corresponding trigger key (named parameter) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [Entry Query][eq] object. This is repeated for every activated filter, and the resulting Entry Query is passed on to the template as the `entries` variable.
+
 
 ### Filter Types
 
@@ -118,57 +180,6 @@ Type       | Description
 [sec]:https://docs.craftcms.com/v3/sections-and-entries.html#sections
 [type]:https://docs.craftcms.com/v3/sections-and-entries.html#entry-types
 [search]:https://docs.craftcms.com/v3/searching.html
-
-
-
-Example
--------
-
-```php
-<?php
-/* config/router.php */
-
-return [
-  'rules' => [
-  
-    // URI pattern with named subpatterns
-    '<sectionHandle:blog>' => [
-      'segments' => [
-        '<foodCategorySlug:{slug}>',
-        '<yearPublished:\d{4}>',
-      ],
-      
-      // array of filters that are activated when
-      // the key matches a subpattern variable declared in
-      // the route's regular expression
-      'criteria' => [
-        
-        // Restrict entries to the selected section
-        'sectionHandle' => [
-          'type' => 'section',
-        ],
-        
-        // Filter entries by year
-        'yearPublished' => [
-          'type' => 'year',
-          'field'=> 'postDate',
-        ],
-        
-        // Filter entries by categories
-        // from the group with the handle 'food'
-        'foodCategorySlug' => [
-          'type' => 'category',
-          'group'=> 'food',
-        ],
-      ],
-      
-      // template file
-      'template' => 'blog/_archive',
-    ],
-    
-  ],
-];
-```
 
 
 
