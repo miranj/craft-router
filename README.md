@@ -3,7 +3,7 @@
 Router
 ======
 
-A [Craft CMS][craft] 3 plugin to route requests to pages with a filtered, pre-loaded list of entries.
+A [Craft CMS][craft] plugin for using URL segments as filtering criteria on an entry query.
 
 [craft]:https://craftcms.com/
 
@@ -117,6 +117,17 @@ return [
   ],
 ];
 ```
+
+
+### Demo
+
+Take a look at [a demo video (36 mins) about the plugin][demo], recorded for Straight Up Craft.
+It talks about the problem that Router is trying to solve, and includes a step-by-step tutorial
+about using the plugin on the [Craft Blog Starter project][starter blog].
+
+[demo]:https://www.youtube.com/watch?v=ofv67KahW_M
+[starter blog]:https://github.com/craftcms/starter-blog
+
 
 ### Parameters
 
