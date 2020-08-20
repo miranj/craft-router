@@ -125,8 +125,8 @@ return [
 [<img src="./demo-poster.jpg" width="240" height="125" alt="Custom Routing with Router, Craft The Planet">][demo]
 
 We recorded [a video (36 mins) about the plugin][demo] for Straight Up Craft.
-It talks about the problems that Router is trying to solve and includes a step-by-step tutorial
-+ demo about using the plugin on the [Craft Blog Starter project][starter blog].
+It talks about the problems that Router is trying to solve and includes a step-by-step
+tutorial + demo about using the plugin on the [Craft Blog Starter project][starter blog].
 
 [demo]:https://www.youtube.com/watch?v=ofv67KahW_M
 [starter blog]:https://github.com/craftcms/starter-blog
