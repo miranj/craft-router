@@ -12,9 +12,9 @@ A [Craft CMS][craft] plugin for using URL segments as filtering criteria on an e
 Contents
 --------
 - [Why](#why)
+  - [Demo](#demo)
 - [Usage](#usage)
   - [Example](#example)
-  - [Demo](#demo)
   - [Parameters](#parameters)
   - [Filters](#filter-types)
 - [Installation](#installation)
@@ -50,6 +50,18 @@ for the URL `blog/2015/01` contain blog posts published in January 2015, or for 
 
 [ar]:https://docs.craftcms.com/v3/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft 3 Documentation"
 [yii routing]:https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#named-parameters "Handling Requests: Routing and URL Creation | Yii 2.0"
+
+
+### Demo
+
+[<img src="./demo-poster.jpg" width="240" height="125" alt="Custom Routing with Router, Craft The Planet">][demo]
+
+We recorded [a video (36 mins) about the plugin][demo] for Straight Up Craft.
+It talks about the problems that Router is trying to solve and includes a step-by-step
+tutorial + demo about using the plugin on the [Craft Blog Starter project][starter blog].
+
+[demo]:https://www.youtube.com/watch?v=ofv67KahW_M
+[starter blog]:https://github.com/craftcms/starter-blog
 
 
 
@@ -118,18 +130,6 @@ return [
   ],
 ];
 ```
-
-
-### Demo
-
-[<img src="./demo-poster.jpg" width="240" height="125" alt="Custom Routing with Router, Craft The Planet">][demo]
-
-We recorded [a video (36 mins) about the plugin][demo] for Straight Up Craft.
-It talks about the problems that Router is trying to solve and includes a step-by-step
-tutorial + demo about using the plugin on the [Craft Blog Starter project][starter blog].
-
-[demo]:https://www.youtube.com/watch?v=ofv67KahW_M
-[starter blog]:https://github.com/craftcms/starter-blog
 
 
 ### Parameters
