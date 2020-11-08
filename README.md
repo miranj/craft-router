@@ -117,7 +117,7 @@ return [
         
         // Filter entries by related entry
         // from the section with the handle 'locations'
-        'category' => [
+        'location' => [
           'type' => 'entry',
           'section' => 'locations',
         ],
