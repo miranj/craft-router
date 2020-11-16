@@ -1,6 +1,6 @@
 {
   "name": "miranj/craft-router",
-  "description": "Craft CMS plugin to route requests to pages with filtered, pre-loaded lists of entries.",
+  "description": "Use URL segments as filtering criteria on an entry query.",
   "type": "craft-plugin",
   "version": "1.0.0",
   "keywords": [
