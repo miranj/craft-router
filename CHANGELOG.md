@@ -4,6 +4,16 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Added
+- Added a new month filter.
+
+### Changed
+- Router now requires Craft 3.7 or later.
+
+
+
 ## 1.0.0 - 2020-08-19
 
 ### Added

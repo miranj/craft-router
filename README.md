@@ -183,6 +183,7 @@ Type       | Description
 `category` | Adds a `relatedTo` criteria to the [Category][cat] with the given slug, and any of its descendants. The Category’s search can be scoped by specifying a Category Group handle in the optional param `group`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Categories to be included in the `relatedTo` criteria.
 `entry`    | Adds a `relatedTo` criteria to the [Entry][] with the given slug, and any of its descendants. The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
 `field`    | Adds a field criteria to the field specified by `handle` (required param).
+`month`    | Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).
 `search`   | Adds a [`search`][search] criteria. Criteria value can be overidden using the optional param `value`.
 `section`  | Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle value can be overidden using the optional param `value`.
 `type`     | Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle value can be overidden using the optional param `value`.

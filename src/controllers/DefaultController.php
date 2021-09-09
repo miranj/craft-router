@@ -9,8 +9,11 @@ namespace miranj\router\controllers;
 use Craft;
 use craft\elements\Entry;
 use craft\fields\BaseOptionsField;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\ElementHelper;
 use craft\web\Controller;
 use miranj\router\Plugin;
+use yii\db\Expression;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -64,6 +67,7 @@ class DefaultController extends Controller
             'field' => 'handle',
             'year' => 'field',
             'date' => 'field',
+            'month' => 'field',
             'section' => 'value',
         ];
         
@@ -121,6 +125,42 @@ class DefaultController extends Controller
                         if ($filter['type'] === 'date') {
                             $value = array_combine(array_slice($date_keys, 0, count($date)), $date);
                         }
+                        break;
+                    
+                    
+                    
+                    case 'month': // month-only filter
+                        
+                        $month = (int)$value;
+                        
+                        // Do not proceed if the date is invalid
+                        if ($month < 1 || $month > 12) {
+                            throw new NotFoundHttpException();
+                        }
+                        
+                        // date filter is applied on postDate by default
+                        if (!isset($filter['field'])) {
+                            $filter['field'] = 'postDate';
+                        }
+                        
+                        // if the field is a custom field, get its full column name
+                        $custom_field = Craft::$app->fields->getFieldByHandle($filter['field']);
+                        if ($custom_field) {
+                            $column = '`content`.`'
+                                . ElementHelper::fieldColumnFromField($custom_field)
+                                . '`';
+                        } else {
+                            $column = '`entries`.`'.$filter['field'].'`';
+                        }
+                        
+                        // normalize to UTC
+                        $timezone_offset = DateTimeHelper::timeZoneOffset(Craft::$app->getTimeZone());
+                        $column = "$column + INTERVAL '$timezone_offset' HOUR_MINUTE";
+                        
+                        // apply the filter
+                        $criteria->andWhere(new Expression("EXTRACT(MONTH FROM $column) = $month"));
+                        
+                        $value = [ 'month' => $month ];
                         break;
                     
                     
