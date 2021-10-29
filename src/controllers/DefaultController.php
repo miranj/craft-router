@@ -250,10 +250,9 @@ class DefaultController extends Controller
                         // or group (for categories etc.)
                         $filter_parent = isset($filter['section'])
                             ? $filter['section']
-                            : false;
-                        $filter_parent = $filter_parent === false && isset($filter['group'])
-                            ? $filter['group']
-                            : false;
+                            : (isset($filter['group'])
+                                ? $filter['group']
+                                : false);
                         
                         // look for the object
                         $value = $this->fetchSingle($value, $filter['type'], $filter_parent);

@@ -12,6 +12,9 @@ Release notes for the Router Craft CMS plugin.
 ### Changed
 - Router now requires Craft 3.7 or later.
 
+### Fixed
+- Fixed a bug where the `section` parameter on the `entry` filter type would be ignored.
+
 
 
 ## 1.0.0 - 2020-08-19
