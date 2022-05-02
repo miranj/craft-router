@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.1.0 - 2021-05-02
 
 ### Added
 - Added a new month filter.
