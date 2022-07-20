@@ -25,6 +25,17 @@
   "require": {
     "craftcms/cms": "^3.7.0"
   },
+  "require-dev": {
+      "craftcms/rector": "dev-main"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+      "allow-plugins": {
+          "yiisoft/yii2-composer": true,
+          "craftcms/plugin-installer": true
+      }
+  },
   "autoload": {
     "psr-4": {
       "miranj\\router\\": "src/"
