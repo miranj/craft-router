@@ -63,7 +63,9 @@ class DefaultController extends Controller
     {
         $shorthand_mappings = [
             'entry' => 'section',
+            'entries' => 'section',
             'category' => 'group',
+            'categories' => 'group',
             'field' => 'handle',
             'year' => 'field',
             'date' => 'field',
@@ -242,9 +244,14 @@ class DefaultController extends Controller
                     
                     
                     
-                    case 'uri':
                     case 'category':
+                    case 'categories':
                     case 'entry':
+                    case 'entries':
+                    case 'uri':
+                    case 'uris':
+                        
+                        $isSingular = in_array($filter['type'], ['uri', 'category', 'entry']);
                         
                         // look for the filter object's section (for entries)
                         // or group (for categories etc.)
@@ -254,11 +261,13 @@ class DefaultController extends Controller
                                 ? $filter['group']
                                 : false);
                         
+                        $includeDescendants = !isset($filter['includeDescendants']) || $filter['includeDescendants'];
+                        
                         // look for the object
-                        $value = $this->fetchSingle($value, $filter['type'], $filter_parent);
+                        $value = $this->fetchMultiple($value, $filter['type'], $filter_parent, $includeDescendants);
                         
                         // abort if no such filter object exists
-                        if ($value === false || $value === null) {
+                        if ($value === false || $value === null || $value === []) {
                             throw new NotFoundHttpException();
                         }
                         
@@ -266,14 +275,11 @@ class DefaultController extends Controller
                         
                         // include descendants for categories and structures
                         // unless explicitly told not to
-                        if (
-                            (!isset($filter['includeDescendants']) || $filter['includeDescendants'])
-                            && $value->getHasDescendants()
-                        ) {
-                            $relatedTo['element'] = [
+                        if ($includeDescendants) {
+                            $relatedTo['element'] = array_merge(
                                 $relatedTo['element'],
-                                $value->getDescendants()
-                            ];
+                                ...array_column($relatedTo['element'], 'descendants')
+                            );
                         }
                         
                         // specify a via relation if a field has been mentioned
@@ -290,6 +296,11 @@ class DefaultController extends Controller
                         $current_relations = $criteria->relatedTo;
                         $current_relations[] = $relatedTo;
                         $criteria->relatedTo($current_relations);
+                        
+                        // if singular, make sure $value is not an array
+                        if ($isSingular) {
+                            $value = array_shift($value);
+                        }
                         break;
                 }
                 

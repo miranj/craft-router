@@ -4,10 +4,17 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Added
+- Added new Categories and Entries filters for handling multiple items per filter.
+
+
+
 ## 1.1.0 - 2021-05-02
 
 ### Added
-- Added a new month filter.
+- Added a new Month filter.
 
 ### Changed
 - Router now requires Craft 3.7 or later.
