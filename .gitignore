@@ -10,3 +10,6 @@
 # Package Managers
 vendor
 composer.lock
+
+# Testing
+IDEAS.md
