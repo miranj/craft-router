@@ -330,18 +330,44 @@ class DefaultController extends Controller
     **/
     private function fetchSingle($slug, $type = 'entry', $parent = false)
     {
+        $items = $this->fetchMultiple($slug, $type, $parent);
+        return is_array($items)
+            ? array_shift($items)
+            : $items;
+    }
+    
+    private function fetchMultiple($slugs, $type = 'entry', $parent = false, $includeDescendants = false)
+    {
+        // normalise to array
+        $slugs = explode(',', $slugs);
+        
+        // singularise types
+        $type = [
+            'categories' => 'category',
+            'entries' => 'entry',
+        ][$type] ?? $type;
+        
         // 
         // Handle Non-Elements
         // 
         switch ($type) {
             case 'section':
-                return Craft::$app->sections->getSectionByHandle($slug);
+            case 'sections':
+                return array_map(function ($slug) {
+                    return Craft::$app->sections->getSectionByHandle($slug);
+                }, $slugs);
             
             case 'field':
-                return Craft::$app->fields->getFieldByHandle($slug);
+            case 'fields':
+                return array_map(function ($slug) {
+                    return Craft::$app->fields->getFieldByHandle($slug);
+                }, $slugs);
             
             case 'uri':
-                return Craft::$app->elements->getElementByUri($slug, null, true);
+            case 'uris':
+                return array_map(function ($slug) {
+                    return Craft::$app->elements->getElementByUri($slug, null, true);
+                }, $slugs);
         }
         
         
@@ -356,14 +382,17 @@ class DefaultController extends Controller
         }
         
         $criteria = $elementType::find();
-        $criteria->slug($slug);
+        $criteria->slug($slugs);
         $criteria->site('*')->unique();
         if ($parent) {
             $criteria->{ $type == 'entry' ? 'section' : 'group' }($parent);
         }
-        $result = $criteria->one();
+        if ($includeDescendants) {
+            $criteria->with([ 'descendants' ]);
+        }
+        $result = $criteria->all();
         
-        if ($result !== null) {
+        if ($result !== []) {
             return $result;
         }
         
