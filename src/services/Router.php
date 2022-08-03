@@ -95,22 +95,19 @@ class Router extends Component
         // loop over each segment
         $segments = ArrayHelper::firstValue($rule)['segments'] ?? [];
         array_unshift($segments, ArrayHelper::firstKey($rule));
+        
+        // replace segment variables with param values
         $segments = array_map(function($segment) use ($params) {
             
-            // if no variables, pass over
-            if (strpos($segment, '<') === false) {
-                return $segment;
-            }
-            
-            $variables = preg_match_all('/<([\w._-]+):(?:[^>]+)>/', $segment, $matches, PREG_SET_ORDER);
+            $variables = $this->getSegmentVariables($segment);
             
             // if no variables, pass over
-            if (empty($matches)) {
+            if (empty($variables)) {
                 return $segment;
             }
             
             // if no matching variables, exclude segment
-            foreach ($matches as $variable) {
+            foreach ($variables as $variable) {
                 if (isset($params[$variable[1]])) {
                     $segment = str_replace($variable[0], $params[$variable[1]], $segment);
                 } else {
@@ -143,5 +140,23 @@ class Router extends Component
     {
         $params = array_merge($this->getRawParams(), $extraParams);
         return $this->getUrl($params);
+    }
+    
+    /**
+     * Get an array of regex URL variables in
+     * the given URL segment
+     *
+     * @return array
+     */
+    protected function getSegmentVariables($segment)
+    {
+        // if no variables, pass over
+        if (strpos($segment, '<') === false) {
+            return [];
+        }
+        
+        preg_match_all('/<([\w._-]+):(?:[^>]+)>/', $segment, $variables, PREG_SET_ORDER);
+        
+        return $variables;
     }
 }
