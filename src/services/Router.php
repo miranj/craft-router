@@ -89,11 +89,34 @@ class Router extends Component
             return false;
         }
         
+        // can multiple segments be combined?
+        $combineSegments = ArrayHelper::firstValue($rule)['additive'] ?? true;
+        
         // unset empty url params
         $params = ArrayHelper::filterEmptyStringsFromArray($params);
         
         // loop over each segment
         $segments = ArrayHelper::firstValue($rule)['segments'] ?? [];
+        
+        // if segments cannot be combined, reduce segment list to 1 item only
+        // go through entire list and use the segment with the most number of
+        // variable:param matches
+        if (!$combineSegments && !empty($segments)) {
+            $segmentsWithMatchCounts = array_map(function($segment) use ($params) {
+                $variables = array_column($this->getSegmentVariables($segment), '1');
+                $paramMatches = array_intersect($variables, array_keys($params));
+                return [
+                    'segment' => $segment,
+                    'paramMatches' => count($paramMatches),
+                ];
+            }, $segments);
+            usort($segmentsWithMatchCounts, function ($a, $b) {
+                return $b['paramMatches'] <=> $a['paramMatches'];
+            });
+            $segments = [array_shift($segmentsWithMatchCounts)['segment']];
+        }
+        
+        // add mandatory segment as well
         array_unshift($segments, ArrayHelper::firstKey($rule));
         
         // replace segment variables with param values
