@@ -50,12 +50,14 @@ class Settings extends Model
         
         // Build a sequential combination of all sub-urls
         // treating each segment as optional
-        function generator(string $base, array $segments) {
+        function generator(string $base, array $segments, bool $combineSegments = true) {
             $list = [$base];
             foreach ($segments as $index => $segment) {
                 $list = array_merge($list, generator(
                     $base.'/'.$segment,
-                    array_slice($segments, $index + 1)
+                    $combineSegments
+                        ? array_slice($segments, $index + 1)
+                        : []
                 ));
             }
             return $list;
@@ -63,7 +65,9 @@ class Settings extends Model
         
         foreach ($this->routes as $basePattern => $ruleConfig) {
             $ruleSegments = $ruleConfig['segments'] ?? [];
+            $combineSegments = $ruleConfig['additive'] ?? true;
             unset($ruleConfig['segments']);
+            unset($ruleConfig['additive']);
             
             $baseRule = [
                 'pattern' => $basePattern,
@@ -72,7 +76,7 @@ class Settings extends Model
             ];
             
             // Add all possible sub-rules using the same base config
-            $segmentCombinations = generator($basePattern, $ruleSegments);
+            $segmentCombinations = generator($basePattern, $ruleSegments, $combineSegments);
             foreach ($segmentCombinations as $segment) {
                 $subRule = $baseRule;
                 $subRule['pattern'] = $segment;
