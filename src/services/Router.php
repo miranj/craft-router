@@ -20,7 +20,7 @@ class Router extends Component
     protected $_activeRouteName = null;
     protected $settings = null;
     
-    public function setParam(string $trigger, string $rawValue, $value)
+    public function setParam(string $trigger, $rawValue, $value)
     {
         $this->_activeParamsRaw[$trigger] = $rawValue;
         $this->_activeParams[$trigger] = $value;
@@ -91,6 +91,11 @@ class Router extends Component
         
         // can multiple segments be combined?
         $combineSegments = ArrayHelper::firstValue($rule)['additive'] ?? true;
+        
+        // convert array params into csvs
+        $params = array_map(function ($value) {
+            return is_array($value) ? implode(',', $value) : $value;
+        }, $params);
         
         // unset empty url params
         $params = ArrayHelper::filterEmptyStringsFromArray($params);

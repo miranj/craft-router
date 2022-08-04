@@ -300,6 +300,8 @@ class DefaultController extends Controller
                         // if singular, make sure $value is not an array
                         if ($isSingular) {
                             $value = array_shift($value);
+                        } else {
+                            $variables[$trigger] = explode(',', $variables[$trigger]);
                         }
                         break;
                 }
