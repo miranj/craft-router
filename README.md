@@ -82,52 +82,52 @@ you will need to create a `router.php` file in your config folder, adjacent to y
 /* config/router.php */
 
 return [
-  'rules' => [
-  
-    // URI pattern with named subpatterns
-    '<section:blog>' => [
-      'segments' => [
-        '<year:\d{4}>',
-        '<category:{slug}>',
-        'in:<location:{slug}>',
-      ],
-      
-      // array of filters that are activated when
-      // the key matches a subpattern variable declared in
-      // the route's regular expression
-      'criteria' => [
+    'rules' => [
         
-        // Restrict entries to the selected section
-        'section' => [
-          'type' => 'section',
+        // URI pattern with named subpatterns
+        '<section:blog>' => [
+            'segments' => [
+                '<year:\d{4}>',
+                '<category:{slug}>',
+                'in:<location:{slug}>',
+            ],
+            
+            // array of filters that are activated when
+            // the key matches a subpattern variable declared in
+            // the route's regular expression
+            'criteria' => [
+                
+                // Restrict entries to the selected section
+                'section' => [
+                    'type' => 'section',
+                ],
+                
+                // Filter entries by year
+                'year' => [
+                    'type' => 'year',
+                    'field' => 'postDate',
+                ],
+                
+                // Filter entries by related category
+                // from the category group with the handle 'travel-styles'
+                'category' => [
+                    'type' => 'category',
+                    'group' => 'travel-styles',
+                ],
+                
+                // Filter entries by related entry
+                // from the section with the handle 'locations'
+                'location' => [
+                    'type' => 'entry',
+                    'section' => 'locations',
+                ],
+            ],
+            
+            // template file
+            'template' => 'blog/_archive',
         ],
         
-        // Filter entries by year
-        'year' => [
-          'type' => 'year',
-          'field' => 'postDate',
-        ],
-        
-        // Filter entries by related category
-        // from the category group with the handle 'travel-styles'
-        'category' => [
-          'type' => 'category',
-          'group' => 'travel-styles',
-        ],
-        
-        // Filter entries by related entry
-        // from the section with the handle 'locations'
-        'location' => [
-          'type' => 'entry',
-          'section' => 'locations',
-        ],
-      ],
-      
-      // template file
-      'template' => 'blog/_archive',
     ],
-    
-  ],
 ];
 ```
 
@@ -179,7 +179,7 @@ An array of filters for the Entry Query. Example:
 _Default: `''`_  
 The template path used to render the request. Example:
 ```php
-'template' => 'trips/index.twig'
+'template' => 'blog/_archive'
 ```
 
 A filter is activated when the corresponding trigger key (named parameter) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [Entry Query][eq] object. This is repeated for every activated filter, and the resulting Entry Query is passed on to the template as the `entries` variable.
