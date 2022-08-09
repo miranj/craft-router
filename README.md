@@ -136,40 +136,51 @@ return [
 
 Each rule expects the following parameters:
 
-- `segments` — An array of optional URL segment rules. Example:
-  ```php
-    [
-      '<year:\d{4}>',
-      '<category:{slug}>',  // eg. budget, luxury, cruise, urban
-      'in:<location:{slug}>',  // eg. asia, europe, australia
-    ]
-    /*
-      This will match the following URL suffixes
-      …/2019
-      …/2019/budget
-      …/2019/budget/in:asia
-      …/2019/in:asia
-      …/budget
-      …/budget/in:asia
-      …/asia
-      
-      Order is relevant, so it will *not* match the following URLs
-      …/budget/2019
-      …/in:asia/budget
-      …/2019/in:asia/budget
-    */
-  ```
+#### segments [array]
 
-- `criteria` — An array of filters for the Entry Query. Example:
-  ```php
-    [
-      'year' => [ 'type' => 'year', 'field' => 'postDate' ],
-      'category' => [ 'type' => 'category', 'group' => 'tripCategories' ],
-      'location' => [ 'type' => 'entry', 'section' => 'locations' ],
-    ]
-  ```
+_Default: `[]`_  
+An array of optional URL segment rules. Example:
+
+```php
+'segments' => [
+    '<year:\d{4}>',
+    '<category:{slug}>',  // eg. budget, luxury, cruise, urban
+    'in:<location:{slug}>',  // eg. asia, europe, australia
+]
+/*
+  This will match the following URL suffixes
+  …/2019
+  …/2019/budget
+  …/2019/budget/in:asia
+  …/2019/in:asia
+  …/budget
+  …/budget/in:asia
+  …/asia
+
+  Order is relevant, so it will *not* match the following URLs
+  …/budget/2019
+  …/in:asia/budget
+  …/2019/in:asia/budget
+*/
+```
+
+#### criteria [array]
+_Default: `[]`_  
+An array of filters for the Entry Query. Example:
+```php
+'criteria' => [
+    'year' => [ 'type' => 'year', 'field' => 'postDate' ],
+    'category' => [ 'type' => 'category', 'group' => 'tripCategories' ],
+    'location' => [ 'type' => 'entry', 'section' => 'locations' ],
+]
+```
   
-- `template` — The template path used to render the request.
+#### template [string]
+_Default: `''`_  
+The template path used to render the request. Example:
+```php
+'template' => 'trips/index.twig'
+```
 
 A filter is activated when the corresponding trigger key (named parameter) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [Entry Query][eq] object. This is repeated for every activated filter, and the resulting Entry Query is passed on to the template as the `entries` variable.
 
