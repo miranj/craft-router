@@ -7,7 +7,7 @@ Release notes for the Router Craft CMS plugin.
 ## Unreleased
 
 ### Added
-- Added new Categories and Entries filters for handling multiple items per filter.
+- Added new Categories, Entries, and URIs filters for handling multiple items per filter.
 - Added `combineSegments` configuration parameter which can be set to `false` to disable segment combinations in routing rules.
 
 
