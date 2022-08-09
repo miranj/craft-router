@@ -65,9 +65,9 @@ class Settings extends Model
         
         foreach ($this->routes as $basePattern => $ruleConfig) {
             $ruleSegments = $ruleConfig['segments'] ?? [];
-            $combineSegments = $ruleConfig['additive'] ?? true;
+            $combineSegments = $ruleConfig['combineSegments'] ?? true;
             unset($ruleConfig['segments']);
-            unset($ruleConfig['additive']);
+            unset($ruleConfig['combineSegments']);
             
             $baseRule = [
                 'pattern' => $basePattern,

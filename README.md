@@ -155,12 +155,34 @@ An array of optional URL segment rules. Example:
   …/2019/in:asia
   …/budget
   …/budget/in:asia
-  …/asia
+  …/in:asia
 
   Order is relevant, so it will *not* match the following URLs
   …/budget/2019
   …/in:asia/budget
   …/2019/in:asia/budget
+*/
+```
+
+#### combineSegments [bool]
+
+_Default: `true`_  
+Enables/disables support for URLs with segment combinations. When disabled,
+only one segment match will be allowed per URL. Example:
+
+```php
+'combineSegments' => false
+/*
+  This will match only the following URL suffixes
+  …/2019
+  …/budget
+  …/in:asia
+
+  It will *not* match the following URLs
+  …/2019/budget
+  …/2019/budget/in:asia
+  …/2019/in:asia
+  …/budget/in:asia
 */
 ```
 

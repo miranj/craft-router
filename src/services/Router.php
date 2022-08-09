@@ -90,7 +90,7 @@ class Router extends Component
         }
         
         // can multiple segments be combined?
-        $combineSegments = ArrayHelper::firstValue($rule)['additive'] ?? true;
+        $combineSegments = ArrayHelper::firstValue($rule)['combineSegments'] ?? true;
         
         // convert array params into csvs
         $params = array_map(function ($value) {
