@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.2.0 - 2022-08-09
 
 ### Added
 - Added new Categories, Entries, and URIs filters for handling multiple items per filter.
