@@ -46,7 +46,8 @@ year, and month _filters_ all in a single template and increasing its overall co
 
 The Router plugin attempts to solve this problem by taking on the job of filtering entries
 based on URL parameters. It adds a new template variable `entries` which can be configured to,
-for the URL `blog/2015/01` contain blog posts published in January 2015, or for the URL `blog/camping/2014` to show blog posts published in 2014 under the category "Camping".
+for the URL `blog/2015/01` contain blog posts published in January 2015, or for the URL
+`blog/camping/2014` to show blog posts published in 2014 under the category "Camping".
 
 [ar]:https://docs.craftcms.com/v3/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft 3 Documentation"
 [yii routing]:https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#named-parameters "Handling Requests: Routing and URL Creation | Yii 2.0"
@@ -136,7 +137,7 @@ return [
 
 Each rule expects the following parameters:
 
-#### segments [array]
+#### `segments` [array]
 
 _Default: `[]`_  
 An array of optional URL segment rules. Example:
@@ -164,7 +165,7 @@ An array of optional URL segment rules. Example:
 */
 ```
 
-#### combineSegments [bool]
+#### `combineSegments` [bool]
 
 _Default: `true`_  
 Enables/disables support for URLs with segment combinations. When disabled,
@@ -186,7 +187,7 @@ only one segment match will be allowed per URL. Example:
 */
 ```
 
-#### criteria [array]
+#### `criteria` [array]
 _Default: `[]`_  
 An array of filters for the Entry Query. Example:
 ```php
@@ -197,34 +198,77 @@ An array of filters for the Entry Query. Example:
 ]
 ```
   
-#### template [string]
+#### `template` [string]
 _Default: `''`_  
 The template path used to render the request. Example:
 ```php
 'template' => 'blog/_archive'
 ```
 
-A filter is activated when the corresponding trigger key (named parameter) is present in the route. Based on the type of filter, a set of conditions (criteria) are added to an [Entry Query][eq] object. This is repeated for every activated filter, and the resulting Entry Query is passed on to the template as the `entries` variable.
+A filter is activated when the corresponding trigger key (named parameter)
+is present in the route. Based on the type of filter, a set of conditions (criteria)
+are added to an [Entry Query][eq] object. This is repeated for every activated filter,
+and the resulting Entry Query is passed on to the template as the `entries` variable.
 
 
 ### Filter Types
 
 The plugin currently supports the following different types of filters:
 
-Type         | Description
-:---         | :---
-`category`   | Adds a `relatedTo` criteria to the [Category][cat] with the given slug, and any of its descendants. The Category’s search can be scoped by specifying a Category Group handle in the optional param `group`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Categories to be included in the `relatedTo` criteria.
-`categories` | Similar to the `category` filter but supports a comma separated list of slugs instead of just one slug.
-`entry`      | Adds a `relatedTo` criteria to the [Entry][] with the given slug, and any of its descendants. The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation’s field can be specified using the optional param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
-`entries`    | Similar to the `entry` filter but supports a comma separated list of slugs instead of just one slug.
-`field`      | Adds a field criteria to the field specified by `handle` (required param).
-`month`      | Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).
-`search`     | Adds a [`search`][search] criteria. Criteria value can be overidden using the optional param `value`.
-`section`    | Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle value can be overidden using the optional param `value`.
-`type`       | Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle value can be overidden using the optional param `value`.
-`uri`        | Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param `section`. The relation's field can be specified using the optional param `field`. Set the filter's `includeDescendants` to false if you do not wish descendant Entries to be included in the `relatedTo` criteria.
-`uris`       | Similar to the `uri` filter but supports a comma separated list of URIs instead of just one URI.
-`year`       | Adds a date range criteria for the given year on optional param `field` (which defaults to `postDate`).
+#### `category`
+Adds a `relatedTo` criteria to the [Category][cat] with the given slug, and any of its
+descendants. The Category’s search can be scoped by specifying a Category Group handle
+in the optional param `group`. The relation’s field can be specified using the optional
+param `field`. Set the filter’s `includeDescendants` to false if you do not wish descendant
+Categories to be included in the `relatedTo` criteria.
+
+#### `categories`
+Similar to the `category` filter but supports a comma separated list of slugs instead of
+just one slug.
+
+#### `entry`
+Adds a `relatedTo` criteria to the [Entry][] with the given slug, and any of its descendants.
+The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param
+`section`. The relation’s field can be specified using the optional param `field`. Set the
+filter’s `includeDescendants` to false if you do not wish descendant Entries to be included
+in the `relatedTo` criteria.
+
+#### `entries`
+Similar to the `entry` filter but supports a comma separated list of slugs instead of just
+one slug.
+
+#### `field`
+Adds a field criteria to the field specified by `handle` (required param).
+
+#### `month`
+Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).
+
+#### `search`
+Adds a [`search`][search] criteria. Criteria value can be overidden using the optional
+param `value`.
+
+#### `section`
+Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle
+value can be overidden using the optional param `value`.
+
+#### `type`
+Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle
+value can be overidden using the optional param `value`.
+
+#### `uri`
+Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The
+Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param
+`section`. The relation's field can be specified using the optional param `field`. Set the
+filter's `includeDescendants` to false if you do not wish descendant Entries to be included
+in the `relatedTo` criteria.
+
+#### `uris`
+Similar to the `uri` filter but supports a comma separated list of URIs instead of just
+one URI.
+
+#### `year`
+Adds a date range criteria for the given year on optional param `field` (which defaults
+to `postDate`).
 
 [cat]:https://docs.craftcms.com/v3/categories.html
 [entry]:https://docs.craftcms.com/v3/sections-and-entries.html#entries
