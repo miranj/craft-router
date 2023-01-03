@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.2.1 - 2023-01-03
 
 ### Fixed
 - Restored pre `v1.2.0` behaviour of the `relatedTo` criteria’s `element` key being a single element  (and not an array) for Category, Entry, and URI filters (for elements without descendants).
