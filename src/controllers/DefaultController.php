@@ -282,6 +282,11 @@ class DefaultController extends Controller
                             ));
                         }
                         
+                        // flatten 'element' array if possible and $isSingular
+                        if ($isSingular && count($relatedTo['element']) === 1) {
+                            $relatedTo['element'] = array_shift($relatedTo['element']);
+                        }
+                        
                         // specify a via relation if a field has been mentioned
                         if (isset($filter['field'])) {
                             $relatedTo['field'] = $filter['field'];
