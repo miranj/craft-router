@@ -276,10 +276,10 @@ class DefaultController extends Controller
                         // include descendants for categories and structures
                         // unless explicitly told not to
                         if ($includeDescendants) {
-                            $relatedTo['element'] = array_merge(
+                            $relatedTo['element'] = array_filter(array_merge(
                                 $relatedTo['element'],
                                 array_column($relatedTo['element'], 'descendants')
-                            );
+                            ));
                         }
                         
                         // specify a via relation if a field has been mentioned
