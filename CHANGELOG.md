@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Added
+- Added support for Craft 4.
+
+
+
 ## 1.2.1 - 2023-01-03
 
 ### Fixed
