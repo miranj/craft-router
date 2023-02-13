@@ -23,8 +23,8 @@
     "source": "https://github.com/miranj/craft-router"
   },
   "require": {
-    "craftcms/cms": "^3.7.0|^4.0",
-    "php": "^7.2.5|^8.0"
+    "craftcms/cms": "^3.7.0 || ^4.0",
+    "php": "^7.2.5 || ^8.0"
   },
   "require-dev": {
       "craftcms/rector": "dev-main"
