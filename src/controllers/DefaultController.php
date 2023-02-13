@@ -19,13 +19,13 @@ use yii\web\Response;
 
 class DefaultController extends Controller
 {
-    protected $allowAnonymous = true;
     protected $routerService = null;
     
-    public function init()
+    public function init(): void
     {
-        parent::init();
+        $this->allowAnonymous = true;
         $this->routerService = Plugin::getInstance()->router;
+        parent::init();
     }
     
     
