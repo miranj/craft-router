@@ -1,6 +1,6 @@
 <?php
 /**
- * Router plugin for Craft CMS 3.x
+ * Router plugin for Craft CMS 3.x, 4.x
  *
  * Define URL rules to pages with a filtered, pre-loaded list of entries.
  *
