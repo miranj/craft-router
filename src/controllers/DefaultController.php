@@ -66,6 +66,8 @@ class DefaultController extends Controller
             'entries' => 'section',
             'category' => 'group',
             'categories' => 'group',
+            'tag' => 'group',
+            'tags' => 'group',
             'field' => 'handle',
             'year' => 'field',
             'date' => 'field',
@@ -248,10 +250,12 @@ class DefaultController extends Controller
                     case 'categories':
                     case 'entry':
                     case 'entries':
+                    case 'tag':
+                    case 'tags':
                     case 'uri':
                     case 'uris':
                         
-                        $isSingular = in_array($filter['type'], ['uri', 'category', 'entry']);
+                        $isSingular = in_array($filter['type'], ['uri', 'category', 'entry', 'tag']);
                         
                         // look for the filter object's section (for entries)
                         // or group (for categories etc.)
@@ -337,14 +341,15 @@ class DefaultController extends Controller
     // =========================================================================
     
     /*
-     * Find the entry/category/section object by slug
+     * Find the entry/category/section/tag object by slug
      * 
      * @param         $slug     the slug/handle of the single object
-     * @param         $type     one of entry, section, category, field, uri
+     * @param         $type     one of entry, section, category, tag, field, uri
      * @param         $parent restrict search of the single object within
      *                                        the parent's scope, where parent is a slug for
-     *                                        section in the case of type:entry, and
-     *                                        category group in the case of type:category
+     *                                        section in the case of type:entry,
+     *                                        category group in the case of type:category,
+     *                                        and tag group in the case of type:tag.
     **/
     private function fetchSingle($slug, $type = 'entry', $parent = false)
     {
@@ -363,6 +368,7 @@ class DefaultController extends Controller
         $type = [
             'categories' => 'category',
             'entries' => 'entry',
+            'tags' => 'tag',
         ][$type] ?? $type;
         
         // 

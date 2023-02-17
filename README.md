@@ -251,6 +251,15 @@ param `value`.
 Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle
 value can be overidden using the optional param `value`.
 
+#### `tag`
+Adds a `relatedTo` criteria to the [Tag][tag] with the given slug. The Tag’s search can be
+scoped by specifying a Tag Group handle in the optional param `group`. The relation’s field
+can be specified using the optional param `field`.
+
+#### `tags`
+Similar to the `tag` filter but supports a comma separated list of slugs instead of
+just one slug.
+
 #### `type`
 Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle
 value can be overidden using the optional param `value`.
@@ -273,6 +282,7 @@ to `postDate`).
 [cat]:https://craftcms.com/docs/4.x/categories.html
 [entry]:https://craftcms.com/docs/4.x/entries.html
 [sec]:https://craftcms.com/docs/4.x/entries.html#sections
+[tag]:https://craftcms.com/docs/4.x/tags.html
 [type]:https://craftcms.com/docs/4.x/entries.html#entry-types
 [search]:https://craftcms.com/docs/4.x/searching.html
 
