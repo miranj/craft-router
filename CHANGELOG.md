@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.4.0 - 2023-02-22
 
 ### Added
 - Added new filters for handling single and multiple Tags as `relatedTo` criteria.
