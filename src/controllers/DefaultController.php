@@ -73,6 +73,7 @@ class DefaultController extends Controller
             'date' => 'field',
             'month' => 'field',
             'section' => 'value',
+            'type' => 'value',
         ];
         
         $criteria = Entry::find();

@@ -6,6 +6,9 @@ Release notes for the Router Craft CMS plugin.
 
 ## Unreleased
 
+### Added
+- Added shorthand for the _Type_ filter's `value` parameter.
+
 ### Fixed
 - Fixed a bug where an element's descendants were incorrectly passed to the `relatedTo` criteria.
 
