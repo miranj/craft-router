@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.4.1 - 2023-09-06
 
 ### Added
 - Added shorthand for the _Type_ filter's `value` parameter.
