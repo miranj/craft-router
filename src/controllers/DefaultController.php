@@ -282,7 +282,7 @@ class DefaultController extends Controller
                         if ($includeDescendants) {
                             $relatedTo['element'] = array_filter(array_merge(
                                 $relatedTo['element'],
-                                array_column($relatedTo['element'], 'descendants')
+                                ...array_column($relatedTo['element'], 'descendants')
                             ));
                         }
                         
