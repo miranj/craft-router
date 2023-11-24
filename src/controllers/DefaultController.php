@@ -286,7 +286,10 @@ class DefaultController extends Controller
                                 ...array_map(function ($element) {
                                     return is_array($element->descendants)
                                         ? $element->descendants
-                                        : $element->descendants->ids();
+                                        : (is_subclass_of($element->descendants, 'Illuminate\Support\Collection')
+                                            ? $element->descendants->all()
+                                            : $element->descendants->ids()
+                                        );
                                 }, $relatedTo['element'])
                             ));
                         }
