@@ -2,7 +2,7 @@
   "name": "miranj/craft-router",
   "description": "Use URL segments as filtering criteria on an entry query.",
   "type": "craft-plugin",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "keywords": [
     "craft",
     "craftcms",

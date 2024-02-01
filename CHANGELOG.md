@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.4.3 - 2024-02-02
 
 ### Fixed
 - Improved compatibility of `relatedTo` elements' descendants on Craft 4.3 and above.
