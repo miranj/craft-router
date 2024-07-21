@@ -14,6 +14,7 @@ use craft\helpers\ElementHelper;
 use craft\web\Controller;
 use miranj\router\Plugin;
 use yii\db\Expression;
+use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -174,7 +175,7 @@ class DefaultController extends Controller
                         
                         // complain if field handle hasn't been set
                         if (!isset($filter['handle'])) {
-                            throw new Exception(
+                            throw new InvalidConfigException(
                                 'Field filters ("type" => "field") need '
                                 .'the field\'s handle ("handle" => "fieldHandle") to be declared.'
                             );

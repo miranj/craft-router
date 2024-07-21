@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Changed
+- An `yii\base\InvalidConfigException` is thrown if the `field` filter is missing the `handle` configuration option.
+
+
+
 ## 1.4.3 - 2024-02-02
 
 ### Fixed
