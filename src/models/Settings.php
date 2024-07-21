@@ -4,9 +4,21 @@ namespace miranj\router\models;
 
 use craft\base\Model;
 
+/**
+* Router Settings Model
+*/
 class Settings extends Model
 {
+    // Public Properties
+    // =========================================================================
+    
+    /**
+     * @var array The URL rules.
+     */
     public $rules = [];
+    
+    // Public Methods
+    // =========================================================================
     
     public function getRoutes(): array
     {
@@ -48,21 +60,6 @@ class Settings extends Model
     {
         $rules = [];
         
-        // Build a sequential combination of all sub-urls
-        // treating each segment as optional
-        function generator(string $base, array $segments, bool $combineSegments = true) {
-            $list = [$base];
-            foreach ($segments as $index => $segment) {
-                $list = array_merge($list, generator(
-                    $base.'/'.$segment,
-                    $combineSegments
-                        ? array_slice($segments, $index + 1)
-                        : []
-                ));
-            }
-            return $list;
-        }
-        
         foreach ($this->routes as $basePattern => $ruleConfig) {
             $ruleSegments = $ruleConfig['segments'] ?? [];
             $combineSegments = $ruleConfig['combineSegments'] ?? true;
@@ -76,7 +73,7 @@ class Settings extends Model
             ];
             
             // Add all possible sub-rules using the same base config
-            $segmentCombinations = generator($basePattern, $ruleSegments, $combineSegments);
+            $segmentCombinations = self::generator($basePattern, $ruleSegments, $combineSegments);
             foreach ($segmentCombinations as $segment) {
                 $subRule = $baseRule;
                 $subRule['pattern'] = $segment;
@@ -85,5 +82,29 @@ class Settings extends Model
         }
         
         return $rules;
+    }
+    
+    // Private Methods
+    // =========================================================================
+    
+    /**
+     * Recursively build a sequential combination of all sub-urls,
+     * treating each segment as optional. Used by self::getNormalizedRoutes().
+     */
+    protected static function generator(
+        string $base,
+        array $segments,
+        bool $combineSegments = true
+    ): array {
+        $list = [$base];
+        foreach ($segments as $index => $segment) {
+            $list = array_merge($list, self::generator(
+                $base.'/'.$segment,
+                $combineSegments
+                    ? array_slice($segments, $index + 1)
+                    : []
+            ));
+        }
+        return $list;
     }
 }
