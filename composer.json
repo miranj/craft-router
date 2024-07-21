@@ -27,15 +27,16 @@
     "php": "^7.2.5 || ^8.0"
   },
   "require-dev": {
-      "craftcms/rector": "dev-main"
+    "craftcms/rector": "dev-main",
+    "craftcms/phpstan": "dev-main"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
-      "allow-plugins": {
-          "yiisoft/yii2-composer": true,
-          "craftcms/plugin-installer": true
-      }
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "craftcms/plugin-installer": true
+    }
   },
   "autoload": {
     "psr-4": {
@@ -47,5 +48,8 @@
     "handle": "router",
     "changelogUrl": "https://raw.githubusercontent.com/miranj/craft-router/v1/CHANGELOG.md",
     "class": "miranj\\router\\Plugin"
+  },
+  "scripts": {
+    "phpstan": "phpstan --memory-limit=1G"
   }
 }
