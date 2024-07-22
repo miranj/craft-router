@@ -262,7 +262,11 @@ just one slug.
 
 #### `type`
 Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle
-value can be overidden using the optional param `value`.
+value can be overidden using the optional param `value`. **Note**: the named URL parameter
+is set to an [EntryType object][getEntryTypeByHandle] in Craft 5, and [EntryType[] array][getEntryTypesByHandle] in Craft 3 and 4.
+
+[getEntryTypeByHandle]:https://docs.craftcms.com/api/v5/craft-services-entries.html#method-getentrytypebyhandle "Services > Entries > getEntryTypeByHandle()"
+[getEntryTypesByHandle]:https://docs.craftcms.com/api/v4/craft-services-sections.html#method-getentrytypesbyhandle "Services > Sections > getEntryTypesByHandle()"
 
 #### `uri`
 Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The

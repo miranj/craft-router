@@ -237,9 +237,17 @@ class DefaultController extends Controller
                         // pre-set value (when present) overrides the URL value
                         $value = isset($filter['value']) ? $filter['value'] : $value;
                         
-                        // abort if no value or no valid EntryType exists
-                        if ($value === false || $value === null
-                        || empty(Craft::$app->sections->getEntryTypesByHandle($value))) {
+                        // abort if no value
+                        if ($value === false || $value === null) {
+                            throw new NotFoundHttpException();
+                        }
+                        
+                        // abort if no valid EntryType exists
+                        // TODO Remove craft\services\Sections for Craft 5+
+                        $value = method_exists(Craft::$app->entries, 'getEntryTypeByHandle') 
+                            ? Craft::$app->entries->getEntryTypeByHandle($value)
+                            : Craft::$app->sections->getEntryTypesByHandle($value);
+                        if (empty($value)) {
                             throw new NotFoundHttpException();
                         }
                         
@@ -387,7 +395,12 @@ class DefaultController extends Controller
             case 'section':
             case 'sections':
                 return array_map(function ($slug) {
-                    return Craft::$app->sections->getSectionByHandle($slug);
+                    return Craft::$app->{
+                        // TODO Remove craft\services\Sections for Craft 5+
+                        method_exists(Craft::$app->entries, 'getSectionByHandle')
+                        ? 'entries'
+                        : 'sections'
+                    }->getSectionByHandle($slug);
                 }, $slugs);
             
             case 'field':
