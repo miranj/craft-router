@@ -49,7 +49,7 @@ based on URL parameters. It adds a new template variable `entries` which can be 
 for the URL `blog/2015/01` contain blog posts published in January 2015, or for the URL
 `blog/camping/2014` to show blog posts published in 2014 under the category "Camping".
 
-[ar]:https://craftcms.com/docs/4.x/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft CMS Documentation"
+[ar]:https://craftcms.com/docs/5.x/system/routing.html#advanced-routing-with-url-rules "Advanced Routing with URL Rules - Craft CMS Documentation"
 [yii routing]:https://www.yiiframework.com/doc/guide/2.0/en/runtime-routing#named-parameters "Handling Requests: Routing and URL Creation | Yii 2.0"
 
 
@@ -73,7 +73,7 @@ In order to create URL rules that automatically build an [Entry Query][eq] based
 you will need to create a `router.php` file in your config folder, adjacent to your existing
 `routes.php` file.
 
-[eq]:https://craftcms.com/docs/4.x/entries.html#querying-entries
+[eq]:https://craftcms.com/docs/5.x/reference/element-types/entries.html#querying-entries
 
 
 ### Example
@@ -283,12 +283,12 @@ one URI.
 Adds a date range criteria for the given year on optional param `field` (which defaults
 to `postDate`).
 
-[cat]:https://craftcms.com/docs/4.x/categories.html
-[entry]:https://craftcms.com/docs/4.x/entries.html
-[sec]:https://craftcms.com/docs/4.x/entries.html#sections
-[tag]:https://craftcms.com/docs/4.x/tags.html
-[type]:https://craftcms.com/docs/4.x/entries.html#entry-types
-[search]:https://craftcms.com/docs/4.x/searching.html
+[cat]:https://craftcms.com/docs/5.x/reference/element-types/categories.html
+[entry]:https://craftcms.com/docs/5.x/reference/element-types/entries.html
+[sec]:https://craftcms.com/docs/5.x/reference/element-types/entries.html#sections
+[tag]:https://craftcms.com/docs/5.x/reference/element-types/tags.html
+[type]:https://craftcms.com/docs/5.x/reference/element-types/entries.html#entry-types
+[search]:https://craftcms.com/docs/5.x/system/searching.html
 
 
 
@@ -319,7 +319,7 @@ Open your terminal and run the following commands:
 
 Requirements
 ------------
-This plugin requires Craft CMS 3 or 4. The Craft 2 version is availabe in [the `v0` branch](https://github.com/miranj/craft-router/tree/v0).
+This plugin requires Craft CMS 3, 4, or 5. The Craft 2 version is availabe in [the `v0` branch](https://github.com/miranj/craft-router/tree/v0).
 
 
 

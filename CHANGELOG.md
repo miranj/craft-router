@@ -6,6 +6,9 @@ Release notes for the Router Craft CMS plugin.
 
 ## Unreleased
 
+### Added
+- Added support for Craft 5.
+
 ### Changed
 - The `type` filter's value will be a single `EntryType` on Craft 5+ (it remains an array of `EntryType[]` on Craft 3, and 4).
 - An `yii\base\InvalidConfigException` is thrown if the `field` filter is missing the `handle` configuration option.
