@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.5.0 - 2024-09-05
 
 ### Added
 - Added support for Craft 5.
