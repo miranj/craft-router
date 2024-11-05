@@ -241,7 +241,7 @@ class DefaultController extends Controller
                         // pre-set value (when present) overrides the URL value
                         $value = isset($filter['value']) ? $filter['value'] : $value;
                         
-                        // normalise value
+                        // normalise value into a mutli-filter
                         $value = array_filter($isSingular ? [$value] : explode(',', $value));
                         
                         // abort if no value
@@ -249,18 +249,34 @@ class DefaultController extends Controller
                             throw new NotFoundHttpException();
                         }
                         
-                        // abort if no valid EntryType exists
                         // TODO Remove $_areEntryTypesUnique for Craft 5+
-                        // TODO Remove craft\services\Sections for Craft 5+
-                        $_entryTypes = [];
                         $_areEntryTypesUnique = method_exists(Craft::$app->entries, 'getEntryTypeByHandle');
+                        $_assumeEntryTypesAreUnique = $_areEntryTypesUnique
+                            || ($filter['assumeUniqueHandles'] ?? false);
+                        
+                        // Look for matching EntryType objects
+                        $_entryTypes = [];
                         foreach ($value as $entryTypeHandle) {
-                            $_entryTypes[] = $_areEntryTypesUnique
-                                ? Craft::$app->entries->getEntryTypeByHandle($entryTypeHandle)
-                                : Craft::$app->sections->getEntryTypesByHandle($entryTypeHandle);
+                            if ($_areEntryTypesUnique) {
+                                $_entryTypes[] = Craft::$app->entries
+                                    ->getEntryTypeByHandle($entryTypeHandle);
+                            } else {
+                                
+                                // TODO Remove craft\services\Sections for Craft 5+
+                                $_matches = Craft::$app->sections
+                                    ->getEntryTypesByHandle($entryTypeHandle);
+                                
+                                // Entry type handles are not unique pre-Craft 5
+                                // so all filter matches will be an array by default
+                                // but this can be overriden for dev-ease-of-use
+                                $_entryTypes[] = $_assumeEntryTypesAreUnique
+                                    ? array_shift($_matches)
+                                    : $_matches;
+                            }
                         }
                         $value = $isSingular ? array_shift($_entryTypes) : $_entryTypes;
                         
+                        // abort if no valid EntryType exists
                         if (empty($value) || empty(array_filter($value))) {
                             throw new NotFoundHttpException();
                         }

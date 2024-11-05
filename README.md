@@ -263,7 +263,7 @@ just one slug.
 #### `type`
 Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle
 value can be overidden using the optional param `value`. **Note**: the named URL parameter
-is set to an [EntryType object][getEntryTypeByHandle] in Craft 5, and [EntryType[] array][getEntryTypesByHandle] in Craft 3 and 4.
+is set to an [EntryType object][getEntryTypeByHandle] in Craft 5 (as expected), but an [EntryType[]][getEntryTypesByHandle] array in Craft 3 and 4. This is because entry type handles are not unique (across sections) in older versions of Craft. You can override this behaviour by setting the filter's `assumeUniqueHandles` optional param to `true`. This parameter has no effect in Craft 5.
 
 [getEntryTypeByHandle]:https://docs.craftcms.com/api/v5/craft-services-entries.html#method-getentrytypebyhandle "Services > Entries > getEntryTypeByHandle()"
 [getEntryTypesByHandle]:https://docs.craftcms.com/api/v4/craft-services-sections.html#method-getentrytypesbyhandle "Services > Sections > getEntryTypesByHandle()"
