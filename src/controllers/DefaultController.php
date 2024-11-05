@@ -277,7 +277,7 @@ class DefaultController extends Controller
                         $value = $isSingular ? array_shift($_entryTypes) : $_entryTypes;
                         
                         // abort if no valid EntryType exists
-                        if (empty($value) || empty(array_filter($value))) {
+                        if (empty($value) || (!$isSingular && empty(array_filter($value)))) {
                             throw new NotFoundHttpException();
                         }
                         
