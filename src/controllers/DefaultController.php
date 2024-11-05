@@ -75,6 +75,7 @@ class DefaultController extends Controller
             'month' => 'field',
             'section' => 'value',
             'type' => 'value',
+            'types' => 'value',
         ];
         
         $criteria = Entry::find();
@@ -233,21 +234,34 @@ class DefaultController extends Controller
                     
                     
                     case 'type':
+                    case 'types':
+                        
+                        $isSingular = $filter['type'] == 'type';
                         
                         // pre-set value (when present) overrides the URL value
                         $value = isset($filter['value']) ? $filter['value'] : $value;
                         
+                        // normalise value
+                        $value = array_filter($isSingular ? [$value] : explode(',', $value));
+                        
                         // abort if no value
-                        if ($value === false || $value === null) {
+                        if ($value === []) {
                             throw new NotFoundHttpException();
                         }
                         
                         // abort if no valid EntryType exists
+                        // TODO Remove $_areEntryTypesUnique for Craft 5+
                         // TODO Remove craft\services\Sections for Craft 5+
-                        $value = method_exists(Craft::$app->entries, 'getEntryTypeByHandle') 
-                            ? Craft::$app->entries->getEntryTypeByHandle($value)
-                            : Craft::$app->sections->getEntryTypesByHandle($value);
-                        if (empty($value)) {
+                        $_entryTypes = [];
+                        $_areEntryTypesUnique = method_exists(Craft::$app->entries, 'getEntryTypeByHandle');
+                        foreach ($value as $entryTypeHandle) {
+                            $_entryTypes[] = $_areEntryTypesUnique
+                                ? Craft::$app->entries->getEntryTypeByHandle($entryTypeHandle)
+                                : Craft::$app->sections->getEntryTypesByHandle($entryTypeHandle);
+                        }
+                        $value = $isSingular ? array_shift($_entryTypes) : $_entryTypes;
+                        
+                        if (empty($value) || empty(array_filter($value))) {
                             throw new NotFoundHttpException();
                         }
                         

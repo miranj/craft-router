@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased
+
+### Added
+- Added new Types filter for filtering by multiple [entry types](https://craftcms.com/docs/5.x/reference/element-types/entries.html#entry-types).
+
+
+
 ## 1.5.0 - 2024-09-05
 
 ### Added

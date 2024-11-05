@@ -268,6 +268,10 @@ is set to an [EntryType object][getEntryTypeByHandle] in Craft 5, and [EntryType
 [getEntryTypeByHandle]:https://docs.craftcms.com/api/v5/craft-services-entries.html#method-getentrytypebyhandle "Services > Entries > getEntryTypeByHandle()"
 [getEntryTypesByHandle]:https://docs.craftcms.com/api/v4/craft-services-sections.html#method-getentrytypesbyhandle "Services > Sections > getEntryTypesByHandle()"
 
+#### `types`
+Similar to the `type` filter but supports a comma separated list of handles instead of
+just one handle.
+
 #### `uri`
 Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The
 Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param
