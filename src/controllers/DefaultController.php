@@ -169,7 +169,7 @@ class DefaultController extends Controller
                         // helper function to figure out column name for user-created fields
                         } elseif ($_isLegacyCraft) {
                             $columns = ['`content`.`'
-                                . ElementHelper::fieldColumnFromField($custom_field)
+                                . ElementHelper::fieldColumnFromField(Craft::$app->fields->getFieldByHandle($filter['field']))
                                 . '`'];
                             
                         // for Craft >= 5.x we need a field layout provider
