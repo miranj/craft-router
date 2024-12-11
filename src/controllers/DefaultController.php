@@ -153,7 +153,6 @@ class DefaultController extends Controller
                         
                         // if the field is a non-native attribute,
                         // we have to figure out its full column name
-                        $_isLegacyCraft = method_exists(ElementHelper::class, 'fieldColumnFromField');
                         $_isNativeEntryField = in_array($filter['field'], [
                             'postDate',
                             'expiryDate',
@@ -164,14 +163,14 @@ class DefaultController extends Controller
                         $columns = [];
                         if ($_isNativeEntryField) {
                             $columns = ['`entries`.`'.$filter['field'].'`'];
-                            
+
                         // for Craft >= 3.7 and < 4.x we use the fieldColumnFromField
                         // helper function to figure out column name for user-created fields
-                        } elseif ($_isLegacyCraft) {
+                        } elseif (method_exists(ElementHelper::class, 'fieldColumnFromField')) {
                             $columns = ['`content`.`'
                                 . ElementHelper::fieldColumnFromField(Craft::$app->fields->getFieldByHandle($filter['field']))
                                 . '`'];
-                            
+
                         // for Craft >= 5.x we need a field layout provider
                         // to and get the column SQL from the field instance
                         } else {
