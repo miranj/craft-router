@@ -241,7 +241,10 @@ one slug.
 Adds a field criteria to the field specified by `handle` (required param).
 
 #### `month`
-Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`). **Note**: For this filter to [work on custom (user-defined) fields in Craft 5][c5 field query], either the `section` or `type`/`types` filter must be applied before the `month` filter.
+Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).
+
+> [!WARNING]
+> For this filter to [work on custom (user-defined) fields in Craft 5][c5 field query], either the [`section`](#section) or [`type`](#type)/[`types`](#types) filter must be applied before the `month` filter.
 
 [c5 field query]:https://craftcms.com/docs/5.x/development/element-queries.html#content-and-custom-fields
 
@@ -264,8 +267,10 @@ just one slug.
 
 #### `type`
 Adds a `type` criteria if the specified [EntryType][type] handle is valid. EntryType handle
-value can be overidden using the optional param `value`. **Note**: the named URL parameter
-is set to an [EntryType object][getEntryTypeByHandle] in Craft 5 (as expected), but an [EntryType[]][getEntryTypesByHandle] array in Craft 3 and 4. This is because entry type handles are not unique (across sections) in older versions of Craft. You can override this behaviour by setting the filter's `assumeUniqueHandles` optional param to `true`. This parameter has no effect in Craft 5.
+value can be overidden using the optional param `value`.
+
+> [!NOTE]
+> The named URL parameter is set to an [EntryType object][getEntryTypeByHandle] in Craft 5 (as expected), but an [EntryType[]][getEntryTypesByHandle] array in Craft 3 and 4. This is because entry type handles are not unique (across sections) in older versions of Craft. You can override this behaviour by setting the filter's `assumeUniqueHandles` optional param to `true`. This parameter has no effect in Craft 5.
 
 [getEntryTypeByHandle]:https://docs.craftcms.com/api/v5/craft-services-entries.html#method-getentrytypebyhandle "Services > Entries > getEntryTypeByHandle()"
 [getEntryTypesByHandle]:https://docs.craftcms.com/api/v4/craft-services-sections.html#method-getentrytypesbyhandle "Services > Sections > getEntryTypesByHandle()"
