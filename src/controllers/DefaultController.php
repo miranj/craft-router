@@ -150,22 +150,86 @@ class DefaultController extends Controller
                             $filter['field'] = 'postDate';
                         }
                         
-                        // if the field is a custom field, get its full column name
-                        $custom_field = Craft::$app->fields->getFieldByHandle($filter['field']);
-                        if ($custom_field) {
-                            $column = '`content`.`'
+                        // if the field is a non-native attribute,
+                        // we have to figure out its full column name
+                        $_isLegacyCraft = method_exists(ElementHelper::class, 'fieldColumnFromField');
+                        $_isNativeEntryField = in_array($filter['field'], [
+                            'postDate',
+                            'expiryDate',
+                            'dateCreated',
+                            'dateUpdated',
+                        ]);
+                        
+                        $columns = [];
+                        if ($_isNativeEntryField) {
+                            $columns = ['`entries`.`'.$filter['field'].'`'];
+                            
+                        // for Craft >= 3.7 and < 4.x we use the fieldColumnFromField
+                        // helper function to figure out column name for user-created fields
+                        } elseif ($_isLegacyCraft) {
+                            $columns = ['`content`.`'
                                 . ElementHelper::fieldColumnFromField($custom_field)
-                                . '`';
+                                . '`'];
+                            
+                        // for Craft >= 5.x we need a field layout provider
+                        // to and get the column SQL from the field instance
                         } else {
-                            $column = '`entries`.`'.$filter['field'].'`';
+                            
+                            // ensure that the query criteria already has
+                            // either a type value or section value
+                            if (!$criteria->typeId && !$criteria->sectionId) {
+                                throw new InvalidConfigException(
+                                    'Month filter ("type" => "month") needs either'
+                                    .'an Entry Type filter or Section filter to be declared first.'
+                                );
+                            }
+                            
+                            // build entry types list
+                            $_entryTypes = [];
+                            if ($criteria->typeId) {
+                                $_entryTypes = collect($criteria->typeId)
+                                    ->map(function ($typeId) {
+                                        return Craft::$app->entries
+                                            ->getEntryTypeById($typeId);
+                                    })
+                                    ->all();
+                            } else {
+                                $_entryTypes = collect($criteria->sectionId)
+                                    ->map(function ($sectionId) {
+                                        return Craft::$app->entries
+                                            ->getEntryTypesBySectionId($sectionId);
+                                    })
+                                    ->flatten()
+                                    ->all();
+                            }
+                            
+                            // get column SQL from all entry types
+                            $columns = collect($_entryTypes)
+                                ->map(function ($entryType) use ($filter) {
+                                    return $entryType->getFieldLayout()
+                                        ->getFieldByHandle($filter['field']);
+                                })
+                                ->filter()
+                                ->map(function ($fieldInstance) {
+                                    return $fieldInstance->getValueSql();
+                                })
+                                ->all();
                         }
                         
                         // normalize to UTC
                         $timezone_offset = DateTimeHelper::timeZoneOffset(Craft::$app->getTimeZone());
-                        $column = "$column + INTERVAL '$timezone_offset' HOUR_MINUTE";
                         
                         // apply the filter
-                        $criteria->andWhere(new Expression("EXTRACT(MONTH FROM $column) = $month"));
+                        $_conditions = collect($columns)
+                            ->map(function ($column) use ($timezone_offset, $month) {
+                                $column = "$column + INTERVAL '$timezone_offset' HOUR_MINUTE";
+                                return new Expression("EXTRACT(MONTH FROM $column) = $month");
+                            })
+                            ->filter();
+                        $criteria->andWhere($_conditions->count() > 1
+                            ? $_conditions->prepend('or')->values()->all()
+                            : $_conditions->one()
+                        );
                         
                         $value = [ 'month' => $month ];
                         break;

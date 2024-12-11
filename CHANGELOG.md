@@ -10,6 +10,9 @@ Release notes for the Router Craft CMS plugin.
 - Added new `types` filter for filtering by multiple [entry types](https://craftcms.com/docs/5.x/reference/element-types/entries.html#entry-types).
 - Added `assumeUniqueHandles` optional parameter for the `type` and `types` filters.
 
+### Fixed
+- Fixed a bug where the `month` filter would fail on user-defined fields in Craft 5.
+
 
 
 ## 1.5.0 - 2024-09-05

@@ -241,7 +241,9 @@ one slug.
 Adds a field criteria to the field specified by `handle` (required param).
 
 #### `month`
-Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).
+Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`). **Note**: For this filter to [work on custom (user-defined) fields in Craft 5][c5 field query], either the `section` or `type`/`types` filter must be applied before the `month` filter.
+
+[c5 field query]:https://craftcms.com/docs/5.x/development/element-queries.html#content-and-custom-fields
 
 #### `search`
 Adds a [`search`][search] criteria. Criteria value can be overidden using the optional
