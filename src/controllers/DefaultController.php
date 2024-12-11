@@ -12,6 +12,7 @@ use craft\fields\BaseOptionsField;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\ElementHelper;
 use craft\web\Controller;
+use Illuminate\Support\Collection;
 use miranj\router\Plugin;
 use yii\db\Expression;
 use yii\base\InvalidConfigException;
@@ -187,14 +188,14 @@ class DefaultController extends Controller
                             // build entry types list
                             $_entryTypes = [];
                             if ($criteria->typeId) {
-                                $_entryTypes = collect($criteria->typeId)
+                                $_entryTypes = Collection::make($criteria->typeId)
                                     ->map(function ($typeId) {
                                         return Craft::$app->entries
                                             ->getEntryTypeById($typeId);
                                     })
                                     ->all();
                             } else {
-                                $_entryTypes = collect($criteria->sectionId)
+                                $_entryTypes = Collection::make($criteria->sectionId)
                                     ->map(function ($sectionId) {
                                         return Craft::$app->entries
                                             ->getEntryTypesBySectionId($sectionId);
@@ -204,7 +205,7 @@ class DefaultController extends Controller
                             }
                             
                             // get column SQL from all entry types
-                            $columns = collect($_entryTypes)
+                            $columns = Collection::make($_entryTypes)
                                 ->map(function ($entryType) use ($filter) {
                                     return $entryType->getFieldLayout()
                                         ->getFieldByHandle($filter['field']);
@@ -220,7 +221,7 @@ class DefaultController extends Controller
                         $timezone_offset = DateTimeHelper::timeZoneOffset(Craft::$app->getTimeZone());
                         
                         // apply the filter
-                        $_conditions = collect($columns)
+                        $_conditions = Collection::make($columns)
                             ->map(function ($column) use ($timezone_offset, $month) {
                                 $column = "$column + INTERVAL '$timezone_offset' HOUR_MINUTE";
                                 return new Expression("EXTRACT(MONTH FROM $column) = $month");
