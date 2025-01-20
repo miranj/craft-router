@@ -2,7 +2,9 @@
 
 namespace miranj\router\models;
 
+use Craft;
 use craft\base\Model;
+use craft\helpers\ArrayHelper;
 
 /**
 * Router Settings Model
@@ -20,9 +22,52 @@ class Settings extends Model
     // Public Methods
     // =========================================================================
     
+    /**
+     * Returns the routing rules defined in config/router.php that are
+     * applicable to the current site.
+     * 
+     * 'rules' => [
+     *      'hello' => [ 'template' => 'hello' ],
+     *      'frenchSite' => [
+     *          'bonjour' => [ 'template' => 'hello' ],
+     *      ],
+     * ]
+     * 
+     * @return array
+     */
+    public function getSiteSpecificRules(): array
+    {
+        $rules = $this->rules;
+        
+        // site-specific logic from craft\services\Routes::getConfigFileRoutes()
+        // https://github.com/craftcms/cms/blob/5.x/src/services/Routes.php#L57
+        
+        // Check for any site-specific routes
+        $sitesService = Craft::$app->getSites();
+        foreach ($sitesService->getAllSites(true) as $site) {
+            if (
+                isset($rules[$site->handle]) &&
+                is_array($rules[$site->handle]) &&
+                !isset($rules[$site->handle]['segments']) &&
+                !isset($rules[$site->handle]['criteria']) &&
+                !isset($rules[$site->handle]['template'])
+            ) {
+                $siteRoutes = ArrayHelper::remove($rules, $site->handle);
+
+                /** @noinspection PhpUnhandledExceptionInspection */
+                if ($site->handle === $sitesService->getCurrentSite()->handle) {
+                    // Merge them so that the localized routes come first
+                    $rules = array_merge($siteRoutes, $rules);
+                }
+            }
+        }
+        
+        return $rules;
+    }
+    
     public function getRoutes(): array
     {
-        $routes = $this->rules;
+        $routes = $this->getSiteSpecificRules();
         
         foreach ($routes as $baseSegment => $config) {
             if (!isset($config['name'])) {
@@ -60,7 +105,7 @@ class Settings extends Model
     {
         $rules = [];
         
-        foreach ($this->routes as $basePattern => $ruleConfig) {
+        foreach ($this->getSiteSpecificRules() as $basePattern => $ruleConfig) {
             $ruleSegments = $ruleConfig['segments'] ?? [];
             $combineSegments = $ruleConfig['combineSegments'] ?? true;
             unset($ruleConfig['segments']);

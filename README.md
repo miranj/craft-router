@@ -71,9 +71,14 @@ Usage
 
 In order to create URL rules that automatically build an [Entry Query][eq] based on the URL,
 you will need to create a `router.php` file in your config folder, adjacent to your existing
-`routes.php` file.
+`routes.php` file. The config file supports a single option `rules`, which should be set to
+an array containing the URL rules.
+
+For [multi-site Craft setups][sites], you can define site-specific URL rules by placing them in a
+sub-array, with the key set to the site’s handle.
 
 [eq]:https://craftcms.com/docs/5.x/reference/element-types/entries.html#querying-entries
+[sites]:https://craftcms.com/docs/5.x/system/sites.html
 
 
 ### Example
@@ -126,6 +131,11 @@ return [
             
             // template file
             'template' => 'blog/_archive',
+        ],
+        
+        // Site-specific rules can be placed in a sub-array
+        'siteHandle' => [
+            '<section:blog>' => …,
         ],
         
     ],
