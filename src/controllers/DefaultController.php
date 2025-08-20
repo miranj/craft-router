@@ -266,9 +266,11 @@ class DefaultController extends Controller
                             if (!is_array($value)) {
                                 throw new NotFoundHttpException();
                             }
-                        } 
+                        }
                         
-                        $criteria->{$field['handle']}($value);
+                        $_fieldCriteria = $filter['alias'] ?? $field['handle'];
+                        
+                        $criteria->{$_fieldCriteria}($value);
                         break;
                     
                     

@@ -248,7 +248,13 @@ Similar to the `entry` filter but supports a comma separated list of slugs inste
 one slug.
 
 #### `field`
-Adds a field criteria to the field specified by `handle` (required param).
+Adds a field criteria to the field specified by `handle` (required param). Since Craft 5 has
+added [support for aliasing field handles][multi-instance] when added to an entry type
+or field layout, the global handle may not be relevant to the query. In these cases, an
+optional `alias` param can be specificed to override the handle by which the field value
+should be queried.
+
+[multi-instance]:https://craftcms.com/docs/5.x/system/fields.html#multi-instance-fields
 
 #### `month`
 Adds a numeric month criteria on the optional param `field` (which defaults to `postDate`).

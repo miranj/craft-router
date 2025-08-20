@@ -9,6 +9,7 @@ Release notes for the Router Craft CMS plugin.
 ### Added
 - Added support for site-specific URL rules.
 - Added new `types` filter for filtering by multiple [entry types](https://craftcms.com/docs/5.x/reference/element-types/entries.html#entry-types).
+- Added `alias` optional parameter for the `field` filter.
 - Added `assumeUniqueHandles` optional parameter for the `type` and `types` filters.
 
 ### Fixed
