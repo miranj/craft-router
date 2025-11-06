@@ -268,7 +268,7 @@ class DefaultController extends Controller
                             }
                         }
                         
-                        $_fieldCriteria = $filter['alias'] ?? $field['handle'];
+                        $_fieldCriteria = $filter['alias'] ?? $filter['handle'];
                         
                         $criteria->{$_fieldCriteria}($value);
                         break;

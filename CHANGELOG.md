@@ -4,6 +4,13 @@ Release notes for the Router Craft CMS plugin.
 
 
 
+## Unreleased 1.6.1
+
+### Fixed
+- Fixed a bug where `field` filters without an `alias` would fail.
+
+
+
 ## 1.6.0 - 2025-11-07
 
 ### Added
