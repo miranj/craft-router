@@ -4,7 +4,7 @@ Release notes for the Router Craft CMS plugin.
 
 
 
-## Unreleased
+## 1.6.0 - 2025-11-07
 
 ### Added
 - Added support for site-specific URL rules.
