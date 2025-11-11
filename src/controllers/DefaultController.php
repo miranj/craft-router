@@ -74,6 +74,8 @@ class DefaultController extends Controller
             'field' => 'handle',
             'year' => 'field',
             'date' => 'field',
+            'since' => 'field',
+            'until' => 'field',
             'month' => 'field',
             'section' => 'value',
             'type' => 'value',
@@ -110,8 +112,12 @@ class DefaultController extends Controller
                         );
                     
                     case 'date': // year [/ month [/ date]] filter
+                    case 'since': // year [- month [- date]] filter
+                    case 'until': // year [- month [- date]] filter
                         
-                        $date = explode('/', $value);
+                        $_separator = in_array($filter['type'] , ['year', 'date']) ? '/' : '-';
+                        
+                        $date = explode($_separator, $value);
                         $date_keys = ['year', 'month', 'day'];
                         $full_date = array_pad($date, 3, '01');
                         
@@ -120,26 +126,47 @@ class DefaultController extends Controller
                             throw new NotFoundHttpException();
                         }
                         
-                        // Build query limits
-                        $after_date = \DateTime::createFromFormat('Y-m-d', implode('-', $full_date));
-                        $before_date = clone $after_date;
-                        $before_date->modify('next '.$date_keys[count($date)-1]);
-                        
                         // date filter is applied on postDate by default
                         if (!isset($filter['field'])) {
                             $filter['field'] = 'postDate';
                         }
                         
-                        // apply the filter
-                        $criteria->{$filter['field']}([
-                            'and',
-                            ">= ".$after_date->format('Y-m-d'),
-                            '< '.$before_date->format('Y-m-d'),
-                        ]);
+                        // Build query limits
+                        $after_date = \DateTime::createFromFormat('Y-m-d', implode('-', $full_date));
+                        $before_date = clone $after_date;
+                        $before_date->modify('next '.$date_keys[count($date)-1]);
                         
-                        // Update filter value for 'date' filter
-                        // Do not modify filter value for legacy 'year' filter
-                        if ($filter['type'] === 'date') {
+                        $conditions = [];
+                        switch ($filter['type']) {
+                            case 'year':
+                            case 'date':
+                                $conditions = [
+                                    '>= '.$after_date->format('Y-m-d'),
+                                    '< '.$before_date->format('Y-m-d'),
+                                ];
+                                break;
+                            
+                            case 'since':
+                                $conditions = [ '>= '.$after_date->format('Y-m-d') ];
+                                break;
+                            
+                            case 'until':
+                                $conditions = [ '< '.$before_date->format('Y-m-d') ];
+                                break;
+                        }
+                        
+                        // append to the list if there are pre-existing conditions on the same field
+                        $conditions = Collection::make($criteria->{$filter['field']} ?? [])
+                            ->concat($conditions);
+                        if ($conditions->count() > 1) {
+                            $conditions = $conditions->prepend('and')->unique();
+                        }
+                        
+                        // apply the filter
+                        $criteria->{$filter['field']}($conditions->values()->all());
+                        
+                        // update filter value (except for the legacy 'year' filter)
+                        if ($filter['type'] !== 'year') {
                             $value = array_combine(array_slice($date_keys, 0, count($date)), $date);
                         }
                         break;

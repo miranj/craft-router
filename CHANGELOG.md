@@ -6,6 +6,9 @@ Release notes for the Router Craft CMS plugin.
 
 ## Unreleased 1.6.1
 
+### Added
+- Added new `since`, and `until` filters for filtering by [date fields](https://craftcms.com/docs/5.x/reference/field-types/date-time.html).
+
 ### Changed
 - The `year` filter has been deprecated. Recommended to use the `date` filter instead.
 

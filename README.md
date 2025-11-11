@@ -280,6 +280,13 @@ param `value`.
 Adds a `section` criteria if the specified [Section][sec] handle is valid. Section handle
 value can be overidden using the optional param `value`.
 
+#### `since`
+Adds a `>=` (on or later) condition for the given _date_ in any of these
+supported formats: `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`. The criteria is
+applied to the `postDate` field by default. This can be customised to
+any valid custom [Date field][date field] by specifying its handle in
+the optional `field` param.
+
 #### `tag`
 Adds a `relatedTo` criteria to the [Tag][tag] with the given slug. The Tag’s search can be
 scoped by specifying a Tag Group handle in the optional param `group`. The relation’s field
@@ -302,6 +309,13 @@ value can be overidden using the optional param `value`.
 #### `types`
 Similar to the `type` filter but supports a comma separated list of handles instead of
 just one handle.
+
+#### `until`
+Adds a `<=` (on or earlier) condition for the given _date_ in any of these
+supported formats: `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`. The criteria is
+applied to the `postDate` field by default. This can be customised to
+any valid custom [Date field][date field] by specifying its handle in
+the optional `field` param.
 
 #### `uri`
 Adds a relatedTo criteria to the entry with the given URI, and any of its descendants. The
