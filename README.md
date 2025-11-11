@@ -110,7 +110,7 @@ return [
                 
                 // Filter entries by year
                 'year' => [
-                    'type' => 'year',
+                    'type' => 'date',
                     'field' => 'postDate',
                 ],
                 
@@ -202,7 +202,7 @@ _Default: `[]`_
 An array of filters for the Entry Query. Example:
 ```php
 'criteria' => [
-    'year' => [ 'type' => 'year', 'field' => 'postDate' ],
+    'year' => [ 'type' => 'date', 'field' => 'postDate' ],
     'category' => [ 'type' => 'category', 'group' => 'tripCategories' ],
     'location' => [ 'type' => 'entry', 'section' => 'locations' ],
 ]
@@ -237,7 +237,7 @@ Similar to the `category` filter but supports a comma separated list of slugs in
 just one slug.
 
 #### `date`
-Adds a date range criteria for the given year, year-month, or year-month-day.
+Adds a date range criteria for the given `YYYY`, `YYYY/MM`, or `YYYY/MM/DD`.
 The criteria is applied to the `postDate` field by default. This can be
 customised to any valid custom [Date field][date field] by specifying its handle
 in the optional `field` param.
