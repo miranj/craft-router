@@ -6,6 +6,9 @@ Release notes for the Router Craft CMS plugin.
 
 ## Unreleased 1.6.1
 
+### Changed
+- The `year` filter has been deprecated. Recommended to use the `date` filter instead.
+
 ### Fixed
 - Fixed a bug where `field` filters without an `alias` would fail.
 

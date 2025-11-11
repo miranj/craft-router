@@ -315,8 +315,7 @@ Similar to the `uri` filter but supports a comma separated list of URIs instead 
 one URI.
 
 #### `year`
-Adds a date range criteria for the given year on optional param `field` (which defaults
-to `postDate`).
+Deprecated. See [`date`](#date).
 
 [cat]:https://craftcms.com/docs/5.x/reference/element-types/categories.html
 [entry]:https://craftcms.com/docs/5.x/reference/element-types/entries.html

@@ -9,6 +9,7 @@ namespace miranj\router\controllers;
 use Craft;
 use craft\elements\Entry;
 use craft\fields\BaseOptionsField;
+use craft\helpers\App;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\ElementHelper;
 use craft\web\Controller;
@@ -100,6 +101,14 @@ class DefaultController extends Controller
                 
                 switch ($filter['type']) {
                     case 'year': // legacy year-only filter
+                        
+                        // show deprecation notice
+                        Craft::$app->getDeprecator()->log(
+                            'router:year',
+                            'The `year` filter has been deprecated. Use `date` instead.',
+                            App::parseEnv('@config/router.php'),
+                        );
+                    
                     case 'date': // year [/ month [/ date]] filter
                         
                         $date = explode('/', $value);
