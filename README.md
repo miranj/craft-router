@@ -236,6 +236,14 @@ Categories to be included in the `relatedTo` criteria.
 Similar to the `category` filter but supports a comma separated list of slugs instead of
 just one slug.
 
+#### `date`
+Adds a date range criteria for the given year, year-month, or year-month-day.
+The criteria is applied to the `postDate` field by default. This can be
+customised to any valid custom [Date field][date field] by specifying its handle
+in the optional `field` param.
+
+[date field]:https://craftcms.com/docs/5.x/reference/field-types/date-time.html
+
 #### `entry`
 Adds a `relatedTo` criteria to the [Entry][] with the given slug, and any of its descendants.
 The Entry’s search can be scoped by specifying a [Section][sec] handle in the optional param
